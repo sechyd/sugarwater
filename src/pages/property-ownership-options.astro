@@ -1,0 +1,416 @@
+---
+/**
+ * Property Ownership Options Page
+ *
+ * This page presents 5 MECE (Mutually Exclusive, Collectively Exhaustive) options
+ * for tenants who want to take ownership of a property currently owned by a Town.
+ *
+ * MECE Principle:
+ * - Mutually Exclusive: Each option represents a distinct acquisition pathway
+ *   that does not overlap with the others.
+ * - Collectively Exhaustive: Together, the 5 options cover every reasonable
+ *   avenue for a tenant to acquire ownership — from private negotiation,
+ *   legal tenant rights, structured financing, collective community action,
+ *   to public policy / government transfer programs.
+ */
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Property Ownership Options — 5 MECE Recommendations">
+
+    <!-- Page Title & Introduction -->
+    <section class="mb-12">
+        <h1 class="mb-6">Property Ownership Options</h1>
+        <p class="text-lg mb-4 leading-relaxed">
+            As tenants in a property owned by the Town, there are several distinct
+            pathways to explore for taking over ownership. The following
+            <strong>5 recommendations</strong> are structured using the
+            <strong>MECE principle</strong> (Mutually Exclusive, Collectively
+            Exhaustive) — meaning each option is a separate, non-overlapping
+            strategy, and together they cover all viable approaches.
+        </p>
+        <p class="text-sm opacity-75">
+            Each option includes a description, key steps, advantages, risks,
+            and an estimated timeline to help guide decision-making.
+        </p>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- OPTION 1: Direct Purchase at Market Value                    -->
+    <!-- ============================================================ -->
+    <section class="mb-14 p-6 rounded-xl bg-white/5 border border-white/10">
+        <div class="flex items-center gap-3 mb-4">
+            <span class="flex items-center justify-center w-10 h-10 rounded-full bg-primary text-primary-content font-bold text-lg">1</span>
+            <h2 class="!mt-0 !mb-0">Direct Purchase at Market Value</h2>
+        </div>
+
+        <!-- Description of what this option involves -->
+        <p class="mb-4 leading-relaxed">
+            Negotiate a straightforward sale with the Town Council or municipal
+            authority. The property is appraised at fair market value by an
+            independent valuer, and you (the tenant) purchase it outright through
+            a standard real-estate transaction. This is the most conventional and
+            fastest route if financing is available.
+        </p>
+
+        <!-- Key steps the tenant would need to follow -->
+        <h3 class="text-lg font-semibold mb-2">Key Steps</h3>
+        <ol class="list-decimal list-inside space-y-1 mb-4 ml-2">
+            <li>Submit a formal Letter of Interest to the Town's property disposal office.</li>
+            <li>Request an independent market valuation of the property.</li>
+            <li>Secure financing (mortgage, cash reserves, or bridging loan).</li>
+            <li>Negotiate sale terms, including price, settlement date, and conditions.</li>
+            <li>Execute the Sale and Purchase Agreement and complete legal transfer.</li>
+        </ol>
+
+        <!-- Advantages and risks laid out side by side -->
+        <div class="grid sm:grid-cols-2 gap-4 mb-4">
+            <div>
+                <h3 class="text-lg font-semibold mb-2 text-green-400">Advantages</h3>
+                <ul class="list-disc list-inside space-y-1 ml-2">
+                    <li>Simplest and most transparent process.</li>
+                    <li>Full ownership rights from day one of settlement.</li>
+                    <li>No dependency on legislative or policy changes.</li>
+                    <li>Clear and predictable timeline.</li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-lg font-semibold mb-2 text-red-400">Risks</h3>
+                <ul class="list-disc list-inside space-y-1 ml-2">
+                    <li>Market-value price may be prohibitively high.</li>
+                    <li>Town may not be willing to sell voluntarily.</li>
+                    <li>Competing offers from third parties could drive up price.</li>
+                    <li>Requires upfront capital or loan eligibility.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Estimated timeline for this option -->
+        <p class="text-sm opacity-75">
+            <strong>Estimated Timeline:</strong> 3 – 9 months (subject to Town
+            Council approval cycles and financing arrangements).
+        </p>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- OPTION 2: Tenant's Right of First Refusal / Pre-emptive Right -->
+    <!-- ============================================================ -->
+    <section class="mb-14 p-6 rounded-xl bg-white/5 border border-white/10">
+        <div class="flex items-center gap-3 mb-4">
+            <span class="flex items-center justify-center w-10 h-10 rounded-full bg-primary text-primary-content font-bold text-lg">2</span>
+            <h2 class="!mt-0 !mb-0">Tenant's Right of First Refusal / Pre-emptive Right</h2>
+        </div>
+
+        <!-- Description of what this option involves -->
+        <p class="mb-4 leading-relaxed">
+            Investigate and exercise any legal or contractual right you may hold
+            as an existing tenant to purchase the property before it is offered to
+            outside buyers. Many jurisdictions grant sitting tenants a statutory
+            "Right of First Refusal" (ROFR) when a public landlord decides to
+            dispose of a property. Even where no statute exists, your lease
+            agreement may contain such a clause.
+        </p>
+
+        <!-- Key steps the tenant would need to follow -->
+        <h3 class="text-lg font-semibold mb-2">Key Steps</h3>
+        <ol class="list-decimal list-inside space-y-1 mb-4 ml-2">
+            <li>Review your lease agreement for any purchase option or ROFR clause.</li>
+            <li>Research local/state legislation on tenant pre-emptive purchase rights.</li>
+            <li>Engage a property lawyer to confirm legal standing and enforce the right.</li>
+            <li>Formally notify the Town in writing that you wish to exercise the right.</li>
+            <li>Negotiate and close the purchase on the terms prescribed by law or contract.</li>
+        </ol>
+
+        <!-- Advantages and risks laid out side by side -->
+        <div class="grid sm:grid-cols-2 gap-4 mb-4">
+            <div>
+                <h3 class="text-lg font-semibold mb-2 text-green-400">Advantages</h3>
+                <ul class="list-disc list-inside space-y-1 ml-2">
+                    <li>May secure the property at a fixed or below-market price.</li>
+                    <li>Legal protection against being outbid by third parties.</li>
+                    <li>Reinforces your position as a long-standing tenant.</li>
+                    <li>Often supported by tenant-protection legislation.</li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-lg font-semibold mb-2 text-red-400">Risks</h3>
+                <ul class="list-disc list-inside space-y-1 ml-2">
+                    <li>Right may not exist in your jurisdiction or lease.</li>
+                    <li>Strict procedural requirements; missing deadlines forfeits the right.</li>
+                    <li>Town may challenge the applicability of the right.</li>
+                    <li>Legal costs if enforcement goes to court.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Estimated timeline for this option -->
+        <p class="text-sm opacity-75">
+            <strong>Estimated Timeline:</strong> 2 – 12 months (depending on
+            whether the right is clearly established or needs litigation).
+        </p>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- OPTION 3: Lease-to-Own (Rent-to-Buy) Agreement               -->
+    <!-- ============================================================ -->
+    <section class="mb-14 p-6 rounded-xl bg-white/5 border border-white/10">
+        <div class="flex items-center gap-3 mb-4">
+            <span class="flex items-center justify-center w-10 h-10 rounded-full bg-primary text-primary-content font-bold text-lg">3</span>
+            <h2 class="!mt-0 !mb-0">Lease-to-Own (Rent-to-Buy) Agreement</h2>
+        </div>
+
+        <!-- Description of what this option involves -->
+        <p class="mb-4 leading-relaxed">
+            Propose converting the existing tenancy into a structured
+            lease-to-own arrangement where a portion of each rental payment is
+            credited toward the eventual purchase price. At the end of the agreed
+            term, you acquire full ownership. This option is ideal when upfront
+            capital is limited but the Town is willing to facilitate a gradual
+            transfer of ownership.
+        </p>
+
+        <!-- Key steps the tenant would need to follow -->
+        <h3 class="text-lg font-semibold mb-2">Key Steps</h3>
+        <ol class="list-decimal list-inside space-y-1 mb-4 ml-2">
+            <li>Propose the lease-to-own concept formally to the Town Council.</li>
+            <li>Agree on the total purchase price, lease term, and rent-credit percentage.</li>
+            <li>Engage solicitors to draft a Lease-Option or Lease-Purchase agreement.</li>
+            <li>Make regular payments, with an agreed portion credited to equity.</li>
+            <li>Exercise the purchase option at the end of the lease term to complete transfer.</li>
+        </ol>
+
+        <!-- Advantages and risks laid out side by side -->
+        <div class="grid sm:grid-cols-2 gap-4 mb-4">
+            <div>
+                <h3 class="text-lg font-semibold mb-2 text-green-400">Advantages</h3>
+                <ul class="list-disc list-inside space-y-1 ml-2">
+                    <li>Low or no upfront capital requirement.</li>
+                    <li>Builds equity gradually while continuing to occupy the property.</li>
+                    <li>Price is locked in at the start, protecting against appreciation.</li>
+                    <li>Demonstrates commitment, which may appeal to the Town Council.</li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-lg font-semibold mb-2 text-red-400">Risks</h3>
+                <ul class="list-disc list-inside space-y-1 ml-2">
+                    <li>Town may not agree to this unconventional arrangement.</li>
+                    <li>Long commitment period (typically 3–10 years).</li>
+                    <li>Risk of losing accumulated credits if you default on payments.</li>
+                    <li>Property maintenance responsibilities may shift to you during the lease.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Estimated timeline for this option -->
+        <p class="text-sm opacity-75">
+            <strong>Estimated Timeline:</strong> 3 – 10 years (the lease-to-own
+            period), with the initial agreement negotiated within 3 – 6 months.
+        </p>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- OPTION 4: Community / Cooperative Acquisition                -->
+    <!-- ============================================================ -->
+    <section class="mb-14 p-6 rounded-xl bg-white/5 border border-white/10">
+        <div class="flex items-center gap-3 mb-4">
+            <span class="flex items-center justify-center w-10 h-10 rounded-full bg-primary text-primary-content font-bold text-lg">4</span>
+            <h2 class="!mt-0 !mb-0">Community / Cooperative Acquisition</h2>
+        </div>
+
+        <!-- Description of what this option involves -->
+        <p class="mb-4 leading-relaxed">
+            Form a community group, cooperative, or tenant association to
+            collectively acquire the property from the Town. By pooling financial
+            resources and presenting a community-benefit case, the group can often
+            access preferential pricing, grants, or community development funding
+            that individual buyers cannot. Ownership is held collectively, with
+            each member holding a share or unit.
+        </p>
+
+        <!-- Key steps the tenant would need to follow -->
+        <h3 class="text-lg font-semibold mb-2">Key Steps</h3>
+        <ol class="list-decimal list-inside space-y-1 mb-4 ml-2">
+            <li>Organise fellow tenants or community members into a formal entity (co-op, trust, or association).</li>
+            <li>Develop a community-benefit business plan and governance structure.</li>
+            <li>Apply for community development grants, social investment, or cooperative financing.</li>
+            <li>Present the collective proposal to the Town with evidence of community support.</li>
+            <li>Negotiate and execute the transfer of ownership to the community entity.</li>
+        </ol>
+
+        <!-- Advantages and risks laid out side by side -->
+        <div class="grid sm:grid-cols-2 gap-4 mb-4">
+            <div>
+                <h3 class="text-lg font-semibold mb-2 text-green-400">Advantages</h3>
+                <ul class="list-disc list-inside space-y-1 ml-2">
+                    <li>Shared financial burden reduces individual cost.</li>
+                    <li>Access to grants and community-specific funding.</li>
+                    <li>Strong political goodwill — Town Councils often favor community ownership.</li>
+                    <li>Long-term stability through collective governance.</li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-lg font-semibold mb-2 text-red-400">Risks</h3>
+                <ul class="list-disc list-inside space-y-1 ml-2">
+                    <li>Requires significant coordination and consensus among members.</li>
+                    <li>Complex legal and governance structure to set up.</li>
+                    <li>Individual ownership is diluted (you hold a share, not sole title).</li>
+                    <li>Grant applications can be lengthy and competitive.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Estimated timeline for this option -->
+        <p class="text-sm opacity-75">
+            <strong>Estimated Timeline:</strong> 6 – 24 months (including entity
+            formation, funding applications, and negotiation with the Town).
+        </p>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- OPTION 5: Government Transfer / Municipal Disposition Program -->
+    <!-- ============================================================ -->
+    <section class="mb-14 p-6 rounded-xl bg-white/5 border border-white/10">
+        <div class="flex items-center gap-3 mb-4">
+            <span class="flex items-center justify-center w-10 h-10 rounded-full bg-primary text-primary-content font-bold text-lg">5</span>
+            <h2 class="!mt-0 !mb-0">Government Transfer / Municipal Disposition Program</h2>
+        </div>
+
+        <!-- Description of what this option involves -->
+        <p class="mb-4 leading-relaxed">
+            Pursue acquisition through an existing (or proposed) government
+            program designed for the disposal or transfer of publicly-owned
+            property. Many municipalities have surplus-property programs,
+            homesteading initiatives, or urban renewal schemes that allow
+            qualifying tenants or residents to acquire public properties at
+            below-market rates or even for a nominal fee. If no such program
+            exists, lobbying for a policy change or council resolution is part of
+            this pathway.
+        </p>
+
+        <!-- Key steps the tenant would need to follow -->
+        <h3 class="text-lg font-semibold mb-2">Key Steps</h3>
+        <ol class="list-decimal list-inside space-y-1 mb-4 ml-2">
+            <li>Research existing municipal property disposal or surplus-property programs.</li>
+            <li>Determine eligibility criteria and application requirements.</li>
+            <li>If no program exists, petition the Town Council or lobby elected representatives to create one.</li>
+            <li>Submit a formal application or proposal under the relevant program.</li>
+            <li>Complete any required conditions (e.g., property improvement commitments) and finalize the transfer.</li>
+        </ol>
+
+        <!-- Advantages and risks laid out side by side -->
+        <div class="grid sm:grid-cols-2 gap-4 mb-4">
+            <div>
+                <h3 class="text-lg font-semibold mb-2 text-green-400">Advantages</h3>
+                <ul class="list-disc list-inside space-y-1 ml-2">
+                    <li>Potentially the lowest-cost route (below market or nominal price).</li>
+                    <li>Government programs often include support services and subsidies.</li>
+                    <li>Aligns with public policy goals (housing, urban renewal).</li>
+                    <li>Creates a precedent that benefits other tenants in similar situations.</li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-lg font-semibold mb-2 text-red-400">Risks</h3>
+                <ul class="list-disc list-inside space-y-1 ml-2">
+                    <li>Programs may not exist or may have restrictive eligibility criteria.</li>
+                    <li>Lobbying for new policy is time-consuming and uncertain.</li>
+                    <li>Bureaucratic processes can cause significant delays.</li>
+                    <li>Transfer may come with binding conditions (e.g., resale restrictions).</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Estimated timeline for this option -->
+        <p class="text-sm opacity-75">
+            <strong>Estimated Timeline:</strong> 6 – 36 months (highly variable;
+            faster if an existing program applies, much longer if policy advocacy
+            is required).
+        </p>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- MECE Summary / Comparison Table                              -->
+    <!-- ============================================================ -->
+    <section class="mb-14">
+        <h2 class="mb-6">Summary Comparison</h2>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="border-b border-white/20">
+                        <th class="py-3 pr-4 font-semibold">#</th>
+                        <th class="py-3 pr-4 font-semibold">Option</th>
+                        <th class="py-3 pr-4 font-semibold">Cost Level</th>
+                        <th class="py-3 pr-4 font-semibold">Complexity</th>
+                        <th class="py-3 pr-4 font-semibold">Timeline</th>
+                        <th class="py-3 font-semibold">Best When…</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Row 1: Direct Purchase -->
+                    <tr class="border-b border-white/10">
+                        <td class="py-3 pr-4">1</td>
+                        <td class="py-3 pr-4">Direct Purchase</td>
+                        <td class="py-3 pr-4">High</td>
+                        <td class="py-3 pr-4">Low</td>
+                        <td class="py-3 pr-4">3 – 9 mo</td>
+                        <td class="py-3">You have financing and the Town is willing to sell</td>
+                    </tr>
+                    <!-- Row 2: Right of First Refusal -->
+                    <tr class="border-b border-white/10">
+                        <td class="py-3 pr-4">2</td>
+                        <td class="py-3 pr-4">Right of First Refusal</td>
+                        <td class="py-3 pr-4">Medium</td>
+                        <td class="py-3 pr-4">Medium</td>
+                        <td class="py-3 pr-4">2 – 12 mo</td>
+                        <td class="py-3">Legal rights exist in your lease or local law</td>
+                    </tr>
+                    <!-- Row 3: Lease-to-Own -->
+                    <tr class="border-b border-white/10">
+                        <td class="py-3 pr-4">3</td>
+                        <td class="py-3 pr-4">Lease-to-Own</td>
+                        <td class="py-3 pr-4">Medium</td>
+                        <td class="py-3 pr-4">Medium</td>
+                        <td class="py-3 pr-4">3 – 10 yr</td>
+                        <td class="py-3">Upfront capital is limited but steady payments are feasible</td>
+                    </tr>
+                    <!-- Row 4: Community / Cooperative -->
+                    <tr class="border-b border-white/10">
+                        <td class="py-3 pr-4">4</td>
+                        <td class="py-3 pr-4">Community / Co-op</td>
+                        <td class="py-3 pr-4">Low – Medium</td>
+                        <td class="py-3 pr-4">High</td>
+                        <td class="py-3 pr-4">6 – 24 mo</td>
+                        <td class="py-3">Multiple tenants can pool resources and community grants apply</td>
+                    </tr>
+                    <!-- Row 5: Government Transfer -->
+                    <tr class="border-b border-white/10">
+                        <td class="py-3 pr-4">5</td>
+                        <td class="py-3 pr-4">Government Transfer</td>
+                        <td class="py-3 pr-4">Low</td>
+                        <td class="py-3 pr-4">High</td>
+                        <td class="py-3 pr-4">6 – 36 mo</td>
+                        <td class="py-3">A municipal disposition or surplus-property program exists</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- Next Steps / Call to Action                                   -->
+    <!-- ============================================================ -->
+    <section class="mb-12 p-6 rounded-xl bg-white/5 border border-white/10">
+        <h2 class="mb-4">Recommended Next Steps</h2>
+        <ol class="list-decimal list-inside space-y-2 ml-2 leading-relaxed">
+            <li><strong>Legal Review:</strong> Engage a property lawyer to review your lease and identify any existing rights (Option 2).</li>
+            <li><strong>Financial Assessment:</strong> Determine your available capital and borrowing capacity to narrow down which options are financially viable (Options 1, 3).</li>
+            <li><strong>Community Consultation:</strong> Speak with fellow tenants to gauge interest in a collective approach (Option 4).</li>
+            <li><strong>Municipal Research:</strong> Contact the Town's property office to inquire about disposal programs and willingness to sell (Options 1, 5).</li>
+            <li><strong>Parallel Pursuit:</strong> Options are not sequential — pursue multiple avenues simultaneously to maximize your chances of success.</li>
+        </ol>
+    </section>
+
+    <!-- Back to home link -->
+    <p class="mb-8">
+        <a href="/" class="btn btn-lg sm:min-w-64">Back to Home</a>
+    </p>
+</Layout>
