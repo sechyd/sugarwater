@@ -31,31 +31,37 @@ const browser = await puppeteer.launch({
 
 try {
   const page = await browser.newPage();
+  await page.setViewport({ width: 1200, height: 1600, deviceScaleFactor: 1 });
   await page.goto(pathToFileURL(htmlPath).href, {
     waitUntil: "networkidle0",
     timeout: 120000,
   });
 
+  // Reinforce 1in left/right page margins (Chrome honors CSS @page for this document)
+  await page.addStyleTag({
+    content: `@page { size: Letter; margin: 0.85in 1in 0.9in 1in !important; }`,
+  });
+
   await page.pdf({
     path: pdfPath,
-    format: "Letter",
     printBackground: true,
-    preferCSSPageSize: false,
+    preferCSSPageSize: true,
+    // Keep Puppeteer margins aligned with @page so header/footer do not collide with body text
     margin: {
-      top: "0.55in",
-      right: "0.6in",
-      bottom: "0.65in",
-      left: "0.6in",
+      top: "0.85in",
+      right: "1in",
+      bottom: "0.9in",
+      left: "1in",
     },
     displayHeaderFooter: true,
     headerTemplate: `
-      <div style="width:100%;font-size:8px;color:#666;padding:0 0.6in;font-family:Helvetica,Arial,sans-serif;display:flex;justify-content:space-between;">
+      <div style="width:100%;box-sizing:border-box;font-size:8px;line-height:10px;color:#555;padding:0 1in;font-family:Helvetica,Arial,sans-serif;display:flex;justify-content:space-between;align-items:center;">
         <span>Domo ↔ Snowflake Connection Guide</span>
         <span>Read Path &amp; Magic ETL</span>
       </div>
     `,
     footerTemplate: `
-      <div style="width:100%;font-size:8px;color:#666;padding:0 0.6in;font-family:Helvetica,Arial,sans-serif;display:flex;justify-content:space-between;">
+      <div style="width:100%;box-sizing:border-box;font-size:8px;line-height:10px;color:#555;padding:0 1in;font-family:Helvetica,Arial,sans-serif;display:flex;justify-content:space-between;align-items:center;">
         <span>Confidential — Integration Runbook</span>
         <span>Page <span class="pageNumber"></span> of <span class="totalPages"></span></span>
       </div>

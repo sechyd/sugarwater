@@ -2,137 +2,317 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Domo and Snowflake Connection Guide</title>
   <style>
-    @page { size: Letter; margin: 0; }
-    * { box-sizing: border-box; animation: none !important; transition: none !important; box-shadow: none !important; }
-    html, body {
-      margin: 0; padding: 0; color: #1a1f1c; background: #fff;
-      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-      font-size: 9.75pt; line-height: 1.42;
-      -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    @page { size: Letter; margin: 0.85in 1in 0.9in 1in; }
+    * {
+      box-sizing: border-box;
+      animation: none !important;
+      transition: none !important;
+      box-shadow: none !important;
     }
-    .wrap { width: 100%; margin: 0; padding: 0; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      color: #1a1f1c;
+      background: #fff;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 10pt;
+      line-height: 1.45;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+      overflow-wrap: anywhere;
+      word-wrap: break-word;
+    }
+    .wrap {
+      width: 100%;
+      max-width: none;
+      margin: 0;
+      padding: 0;
+      overflow: visible;
+    }
     header.doc-hero {
-      padding: 0 0 8pt; margin: 0 0 10pt;
+      padding: 0 0 10pt;
+      margin: 0 0 12pt;
       border-bottom: 1.5pt solid #0f6b5c;
-      break-inside: avoid; page-break-inside: avoid;
+      break-inside: avoid;
+      page-break-inside: avoid;
     }
     .eyebrow {
-      display: block; font-size: 7.5pt; font-weight: 700;
-      letter-spacing: 0.08em; text-transform: uppercase;
-      color: #0f6b5c; margin: 0 0 3pt;
+      display: block;
+      font-size: 8pt;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #0f6b5c;
+      margin: 0 0 4pt;
     }
     h1 {
       font-family: Georgia, "Times New Roman", serif;
-      font-size: 16.5pt; line-height: 1.18; font-weight: 700;
-      margin: 0 0 6pt; color: #12201b;
+      font-size: 16pt;
+      line-height: 1.2;
+      font-weight: 700;
+      margin: 0 0 8pt;
+      color: #12201b;
+      overflow-wrap: break-word;
     }
-    .lede { font-size: 9.75pt; color: #333; margin: 0 0 5pt; max-width: none; }
-    .meta-row { display: block; margin-top: 4pt; color: #555; font-size: 8pt; }
+    .lede {
+      font-size: 10pt;
+      color: #333;
+      margin: 0 0 6pt;
+      max-width: none;
+    }
+    .meta-row {
+      display: block;
+      margin-top: 6pt;
+      color: #555;
+      font-size: 8.5pt;
+    }
     .meta-row span { display: inline; }
     nav.toc {
-      background: #f4f7f5; border: 0.6pt solid #c5d0cb; border-radius: 0;
-      padding: 8pt 10pt; margin: 0 0 11pt;
-      break-inside: avoid; page-break-inside: avoid;
+      background: #f4f7f5;
+      border: 0.75pt solid #c5d0cb;
+      border-radius: 0;
+      padding: 10pt 12pt;
+      margin: 0 0 14pt;
+      break-inside: avoid;
+      page-break-inside: avoid;
     }
     nav.toc h2 {
-      font-family: Helvetica, Arial, sans-serif; font-size: 8.5pt;
-      margin: 0 0 5pt; text-transform: uppercase; letter-spacing: 0.06em;
-      color: #555; border: 0; padding: 0;
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: 9pt;
+      margin: 0 0 6pt;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #555;
+      border: 0;
+      padding: 0;
     }
-    nav.toc ol { margin: 0; padding-left: 13pt; columns: 2; column-gap: 14pt; }
-    nav.toc li { margin: 1.5pt 0; break-inside: avoid; font-size: 8.5pt; }
-    nav.toc a { color: #1a1f1c; text-decoration: none; }
-    section { margin: 0 0 9pt; padding: 0; }
+    nav.toc ol {
+      margin: 0;
+      padding-left: 16pt;
+      columns: 1;
+      column-gap: 0;
+    }
+    nav.toc li {
+      margin: 2pt 0;
+      break-inside: avoid;
+      font-size: 9pt;
+    }
+    nav.toc a {
+      color: #1a1f1c;
+      text-decoration: none;
+    }
+    section {
+      margin: 0 0 12pt;
+      padding: 0;
+      overflow: visible;
+    }
     h2 {
       font-family: Georgia, "Times New Roman", serif;
-      font-size: 12pt; margin: 11pt 0 5pt; color: #12201b;
-      border-bottom: 0.6pt solid #d5ddd8; padding-bottom: 2pt;
-      break-after: avoid; page-break-after: avoid;
+      font-size: 12.5pt;
+      margin: 14pt 0 6pt;
+      color: #12201b;
+      border-bottom: 0.75pt solid #d5ddd8;
+      padding-bottom: 3pt;
+      break-after: avoid;
+      page-break-after: avoid;
     }
     h3 {
-      font-size: 10.25pt; margin: 8pt 0 3pt; color: #1a1f1c;
-      break-after: avoid; page-break-after: avoid;
+      font-size: 11pt;
+      margin: 10pt 0 4pt;
+      color: #1a1f1c;
+      break-after: avoid;
+      page-break-after: avoid;
     }
     h4 {
-      font-size: 9.75pt; margin: 6pt 0 2pt; color: #243029;
-      break-after: avoid; page-break-after: avoid;
+      font-size: 10pt;
+      margin: 8pt 0 3pt;
+      color: #243029;
+      break-after: avoid;
+      page-break-after: avoid;
     }
-    p { margin: 0 0 5pt; orphans: 3; widows: 3; }
-    ul, ol { margin: 0 0 5pt; padding-left: 15pt; }
-    li { margin: 1pt 0; }
-    li > ul, li > ol { margin: 1.5pt 0; }
-    a { color: #0a4d42; text-decoration: none; }
+    p { margin: 0 0 6pt; orphans: 3; widows: 3; }
+    ul, ol { margin: 0 0 6pt; padding-left: 18pt; }
+    li { margin: 1.5pt 0; }
+    li > ul, li > ol { margin: 2pt 0; }
+    a { color: #0a4d42; text-decoration: none; word-break: break-word; }
     .callout {
-      border: 0.6pt solid #c5d0cb; background: #f7f9f8; border-radius: 0;
-      padding: 6pt 8pt; margin: 5pt 0 6pt;
-      break-inside: avoid; page-break-inside: avoid;
+      border: 0.75pt solid #c5d0cb;
+      background: #f7f9f8;
+      border-radius: 0;
+      padding: 8pt 10pt;
+      margin: 6pt 0 8pt;
+      break-inside: avoid;
+      page-break-inside: avoid;
+      overflow: visible;
     }
-    .callout.warn { background: #fff8ee; border-color: #d4a85a; border-left: 2.25pt solid #c48a1a; }
-    .callout.info { background: #f3f7fc; border-color: #9db4d4; border-left: 2.25pt solid #4a78b0; }
-    .callout.accent { background: #eef7f4; border-color: #9ecfc3; border-left: 2.25pt solid #0f6b5c; }
+    .callout.warn {
+      background: #fff8ee;
+      border-color: #d4a85a;
+      border-left: 2.5pt solid #c48a1a;
+    }
+    .callout.info {
+      background: #f3f7fc;
+      border-color: #9db4d4;
+      border-left: 2.5pt solid #4a78b0;
+    }
+    .callout.accent {
+      background: #eef7f4;
+      border-color: #9ecfc3;
+      border-left: 2.5pt solid #0f6b5c;
+    }
     .callout strong.label {
-      display: block; font-size: 7.5pt; letter-spacing: 0.05em;
-      text-transform: uppercase; margin-bottom: 2pt; color: #333;
+      display: block;
+      font-size: 8pt;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 2pt;
+      color: #333;
     }
-    /* Steps may span pages — avoids large blank gaps before tall blocks */
     .step {
-      background: #fff; border: 0.6pt solid #d0d8d3;
-      border-left: 2.25pt solid #0f6b5c; border-radius: 0;
-      padding: 6pt 8pt 6pt; margin: 4pt 0 5pt;
-      break-inside: auto; page-break-inside: auto;
+      background: #fff;
+      border: 0.75pt solid #d0d8d3;
+      border-left: 2.5pt solid #0f6b5c;
+      border-radius: 0;
+      padding: 8pt 10pt;
+      margin: 5pt 0 7pt;
+      break-inside: auto;
+      page-break-inside: auto;
+      overflow: visible;
     }
-    .step > h4 { break-after: avoid; page-break-after: avoid; }
+    .step > h4 {
+      break-after: avoid;
+      page-break-after: avoid;
+    }
     .step-num {
-      display: inline-block; min-width: 13pt; height: 13pt; line-height: 13pt;
-      text-align: center; border-radius: 0; background: #0f6b5c; color: #fff;
-      font-size: 7.5pt; font-weight: 700; margin-right: 3pt; padding: 0 2.5pt;
+      display: inline-block;
+      min-width: 14pt;
+      height: 14pt;
+      line-height: 14pt;
+      text-align: center;
+      border-radius: 0;
+      background: #0f6b5c;
+      color: #fff;
+      font-size: 8pt;
+      font-weight: 700;
+      margin-right: 4pt;
+      padding: 0 3pt;
       vertical-align: middle;
     }
-    .step h4 { display: block; margin: 0 0 3pt; font-size: 9.75pt; color: #12201b; }
+    .step h4 {
+      display: block;
+      margin: 0 0 4pt;
+      font-size: 10pt;
+      color: #12201b;
+    }
     pre {
-      background: #1f2a26; color: #e8f0eb; border-radius: 0;
-      padding: 6pt 7pt; overflow: hidden; white-space: pre-wrap; word-break: break-word;
+      background: #1f2a26;
+      color: #e8f0eb;
+      border-radius: 0;
+      padding: 8pt 9pt;
+      margin: 4pt 0 6pt;
+      overflow: visible;
+      white-space: pre-wrap;
+      word-break: break-word;
+      overflow-wrap: anywhere;
       font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-      font-size: 7.5pt; line-height: 1.32; margin: 3pt 0 5pt;
-      break-inside: auto; page-break-inside: auto;
+      font-size: 8pt;
+      line-height: 1.35;
+      break-inside: auto;
+      page-break-inside: auto;
+      max-width: 100%;
     }
     code {
       font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-      font-size: 0.9em; background: #eef2f0; padding: 0 1.5pt;
+      font-size: 0.9em;
+      background: #eef2f0;
+      padding: 0 2pt;
+      word-break: break-word;
     }
-    pre code { background: transparent; color: inherit; padding: 0; font-size: inherit; }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+      font-size: inherit;
+    }
     table {
-      width: 100%; border-collapse: collapse; background: #fff;
-      border: 0.6pt solid #c5d0cb; margin: 4pt 0 6pt; font-size: 8pt;
+      width: 100%;
+      max-width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border: 0.75pt solid #c5d0cb;
+      margin: 5pt 0 8pt;
+      font-size: 8.5pt;
+      table-layout: fixed;
     }
     thead { display: table-header-group; }
     tr { break-inside: avoid; page-break-inside: avoid; }
-    th, td { text-align: left; padding: 3.5pt 4.5pt; border-bottom: 0.45pt solid #d5ddd8; vertical-align: top; }
-    th { background: #e8efeb; font-weight: 700; color: #243029; }
+    th, td {
+      text-align: left;
+      padding: 4pt 5pt;
+      border-bottom: 0.5pt solid #d5ddd8;
+      vertical-align: top;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+    th {
+      background: #e8efeb;
+      font-weight: 700;
+      color: #243029;
+    }
     tr:last-child td { border-bottom: 0; }
-    .flow { display: block; margin: 4pt 0 6pt; }
+    .flow { display: block; margin: 5pt 0 8pt; }
     .flow-item {
-      display: grid; grid-template-columns: 14pt 1fr; gap: 5pt; align-items: start;
-      background: #fff; border: 0.5pt solid #d0d8d3; border-radius: 0;
-      padding: 3.5pt 5pt; margin: 0 0 2.5pt;
-      break-inside: avoid; page-break-inside: avoid;
+      display: grid;
+      grid-template-columns: 16pt minmax(0, 1fr);
+      gap: 6pt;
+      align-items: start;
+      background: #fff;
+      border: 0.5pt solid #d0d8d3;
+      border-radius: 0;
+      padding: 4pt 6pt;
+      margin: 0 0 3pt;
+      break-inside: avoid;
+      page-break-inside: avoid;
     }
     .flow-item .n {
-      width: 13pt; height: 13pt; border-radius: 50%; background: #d8efe9; color: #0a4d42;
-      display: grid; place-items: center; font-weight: 700; font-size: 7.5pt;
+      width: 14pt;
+      height: 14pt;
+      border-radius: 50%;
+      background: #d8efe9;
+      color: #0a4d42;
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      font-size: 8pt;
     }
     .checklist { list-style: none; padding-left: 0; }
-    .checklist li { position: relative; padding-left: 13pt; margin: 1.5pt 0; }
+    .checklist li {
+      position: relative;
+      padding-left: 14pt;
+      margin: 2pt 0;
+    }
     .checklist li::before {
-      content: "☐"; position: absolute; left: 0; top: 0;
-      width: auto; height: auto; border: 0; background: transparent;
-      color: #0f6b5c; font-size: 9.5pt; line-height: 1.3;
+      content: "☐";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: auto;
+      height: auto;
+      border: 0;
+      background: transparent;
+      color: #0f6b5c;
+      font-size: 10pt;
+      line-height: 1.3;
     }
     footer {
-      border-top: 0.6pt solid #c5d0cb; padding-top: 6pt; margin-top: 8pt;
-      color: #555; font-size: 8pt;
+      border-top: 0.75pt solid #c5d0cb;
+      padding-top: 8pt;
+      margin-top: 10pt;
+      color: #555;
+      font-size: 8.5pt;
     }
   </style>
 </head>
