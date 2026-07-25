@@ -2,372 +2,143 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Domo ↔ Snowflake Connection Guide — Read Path &amp; Magic ETL Queries</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,500;9..144,700&display=swap" rel="stylesheet" />
+  <title>Domo and Snowflake Connection Guide</title>
   <style>
-    :root {
-      --ink: #14201c;
-      --ink-soft: #33463d;
-      --muted: #5c6f66;
-      --line: #c9d5ce;
-      --paper: #f3f7f4;
-      --panel: #ffffff;
-      --accent: #0f6b5c;
-      --accent-deep: #0a4d42;
-      --accent-soft: #d8efe9;
-      --warn-bg: #fff6e8;
-      --warn-border: #e0b56a;
-      --info-bg: #eaf2ff;
-      --info-border: #7ea0d6;
-      --code-bg: #1a2823;
-      --code-fg: #e6f0eb;
-      --shadow: 0 1px 0 rgba(20, 32, 28, 0.04), 0 12px 32px rgba(20, 32, 28, 0.06);
-      --radius: 10px;
-      --max: 880px;
+    @page { size: Letter; margin: 0; }
+    * { box-sizing: border-box; animation: none !important; transition: none !important; box-shadow: none !important; }
+    html, body {
+      margin: 0; padding: 0; color: #1a1f1c; background: #fff;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 9.75pt; line-height: 1.42;
+      -webkit-print-color-adjust: exact; print-color-adjust: exact;
     }
-
-    * { box-sizing: border-box; }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      margin: 0;
-      color: var(--ink);
-      font-family: "IBM Plex Sans", sans-serif;
-      line-height: 1.65;
-      background:
-        radial-gradient(1200px 500px at 10% -10%, #dceee8 0%, transparent 55%),
-        radial-gradient(900px 420px at 100% 0%, #e7eef5 0%, transparent 50%),
-        linear-gradient(180deg, #eef4f0 0%, var(--paper) 280px, var(--paper) 100%);
-    }
-
-    a { color: var(--accent-deep); text-underline-offset: 2px; }
-    a:hover { color: var(--accent); }
-
-    .wrap {
-      width: min(var(--max), calc(100% - 2rem));
-      margin: 0 auto;
-      padding: 2.5rem 0 5rem;
-    }
-
+    .wrap { width: 100%; margin: 0; padding: 0; }
     header.doc-hero {
-      padding: 1.5rem 0 2rem;
-      border-bottom: 1px solid var(--line);
-      margin-bottom: 2rem;
-      animation: rise 0.7s ease both;
+      padding: 0 0 8pt; margin: 0 0 10pt;
+      border-bottom: 1.5pt solid #0f6b5c;
+      break-inside: avoid; page-break-inside: avoid;
     }
-
     .eyebrow {
-      display: inline-block;
-      font-size: 0.78rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin: 0 0 0.75rem;
+      display: block; font-size: 7.5pt; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: #0f6b5c; margin: 0 0 3pt;
     }
-
     h1 {
-      font-family: Fraunces, Georgia, serif;
-      font-weight: 700;
-      font-size: clamp(1.9rem, 4vw, 2.6rem);
-      line-height: 1.15;
-      margin: 0 0 0.85rem;
-      letter-spacing: -0.02em;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 16.5pt; line-height: 1.18; font-weight: 700;
+      margin: 0 0 6pt; color: #12201b;
     }
-
-    .lede {
-      font-size: 1.05rem;
-      color: var(--ink-soft);
-      max-width: 62ch;
-      margin: 0;
-    }
-
-    .meta-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.6rem 1rem;
-      margin-top: 1.25rem;
-      color: var(--muted);
-      font-size: 0.9rem;
-    }
-
+    .lede { font-size: 9.75pt; color: #333; margin: 0 0 5pt; max-width: none; }
+    .meta-row { display: block; margin-top: 4pt; color: #555; font-size: 8pt; }
+    .meta-row span { display: inline; }
     nav.toc {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 1.25rem 1.4rem;
-      margin: 0 0 2.5rem;
-      animation: rise 0.8s ease 0.05s both;
+      background: #f4f7f5; border: 0.6pt solid #c5d0cb; border-radius: 0;
+      padding: 8pt 10pt; margin: 0 0 11pt;
+      break-inside: avoid; page-break-inside: avoid;
     }
-
     nav.toc h2 {
-      font-size: 0.95rem;
-      margin: 0 0 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--muted);
+      font-family: Helvetica, Arial, sans-serif; font-size: 8.5pt;
+      margin: 0 0 5pt; text-transform: uppercase; letter-spacing: 0.06em;
+      color: #555; border: 0; padding: 0;
     }
-
-    nav.toc ol {
-      margin: 0;
-      padding-left: 1.2rem;
-      columns: 1;
-    }
-
-    @media (min-width: 720px) {
-      nav.toc ol { columns: 2; column-gap: 2rem; }
-    }
-
-    nav.toc li { margin: 0.35rem 0; break-inside: avoid; }
-    nav.toc a { text-decoration: none; color: var(--ink-soft); }
-    nav.toc a:hover { color: var(--accent); text-decoration: underline; }
-
-    section {
-      margin: 0 0 2.75rem;
-      animation: rise 0.75s ease both;
-    }
-
+    nav.toc ol { margin: 0; padding-left: 13pt; columns: 2; column-gap: 14pt; }
+    nav.toc li { margin: 1.5pt 0; break-inside: avoid; font-size: 8.5pt; }
+    nav.toc a { color: #1a1f1c; text-decoration: none; }
+    section { margin: 0 0 9pt; padding: 0; }
     h2 {
-      font-family: Fraunces, Georgia, serif;
-      font-size: 1.55rem;
-      margin: 0 0 0.85rem;
-      padding-top: 0.5rem;
-      letter-spacing: -0.015em;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 12pt; margin: 11pt 0 5pt; color: #12201b;
+      border-bottom: 0.6pt solid #d5ddd8; padding-bottom: 2pt;
+      break-after: avoid; page-break-after: avoid;
     }
-
     h3 {
-      font-size: 1.12rem;
-      margin: 1.75rem 0 0.6rem;
-      color: var(--ink);
+      font-size: 10.25pt; margin: 8pt 0 3pt; color: #1a1f1c;
+      break-after: avoid; page-break-after: avoid;
     }
-
     h4 {
-      font-size: 1rem;
-      margin: 1.35rem 0 0.45rem;
-      color: var(--ink-soft);
+      font-size: 9.75pt; margin: 6pt 0 2pt; color: #243029;
+      break-after: avoid; page-break-after: avoid;
     }
-
-    p { margin: 0 0 1rem; }
-
-    ul, ol { margin: 0 0 1rem; padding-left: 1.35rem; }
-    li { margin: 0.35rem 0; }
-    li > ul, li > ol { margin-top: 0.35rem; margin-bottom: 0.35rem; }
-
+    p { margin: 0 0 5pt; orphans: 3; widows: 3; }
+    ul, ol { margin: 0 0 5pt; padding-left: 15pt; }
+    li { margin: 1pt 0; }
+    li > ul, li > ol { margin: 1.5pt 0; }
+    a { color: #0a4d42; text-decoration: none; }
     .callout {
-      border-radius: var(--radius);
-      border: 1px solid var(--line);
-      background: var(--panel);
-      padding: 1rem 1.15rem;
-      margin: 1rem 0 1.25rem;
+      border: 0.6pt solid #c5d0cb; background: #f7f9f8; border-radius: 0;
+      padding: 6pt 8pt; margin: 5pt 0 6pt;
+      break-inside: avoid; page-break-inside: avoid;
     }
-
-    .callout.warn {
-      background: var(--warn-bg);
-      border-color: var(--warn-border);
-    }
-
-    .callout.info {
-      background: var(--info-bg);
-      border-color: var(--info-border);
-    }
-
-    .callout.accent {
-      background: var(--accent-soft);
-      border-color: #9ecfc3;
-    }
-
+    .callout.warn { background: #fff8ee; border-color: #d4a85a; border-left: 2.25pt solid #c48a1a; }
+    .callout.info { background: #f3f7fc; border-color: #9db4d4; border-left: 2.25pt solid #4a78b0; }
+    .callout.accent { background: #eef7f4; border-color: #9ecfc3; border-left: 2.25pt solid #0f6b5c; }
     .callout strong.label {
-      display: block;
-      font-size: 0.78rem;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      margin-bottom: 0.35rem;
+      display: block; font-size: 7.5pt; letter-spacing: 0.05em;
+      text-transform: uppercase; margin-bottom: 2pt; color: #333;
     }
-
+    /* Steps may span pages — avoids large blank gaps before tall blocks */
     .step {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 1.15rem 1.25rem 1.25rem;
-      margin: 1rem 0 1.25rem;
+      background: #fff; border: 0.6pt solid #d0d8d3;
+      border-left: 2.25pt solid #0f6b5c; border-radius: 0;
+      padding: 6pt 8pt 6pt; margin: 4pt 0 5pt;
+      break-inside: auto; page-break-inside: auto;
     }
-
+    .step > h4 { break-after: avoid; page-break-after: avoid; }
     .step-num {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 1.7rem;
-      height: 1.7rem;
-      padding: 0 0.45rem;
-      border-radius: 999px;
-      background: var(--accent);
-      color: #fff;
-      font-size: 0.8rem;
-      font-weight: 700;
-      margin-right: 0.5rem;
+      display: inline-block; min-width: 13pt; height: 13pt; line-height: 13pt;
+      text-align: center; border-radius: 0; background: #0f6b5c; color: #fff;
+      font-size: 7.5pt; font-weight: 700; margin-right: 3pt; padding: 0 2.5pt;
       vertical-align: middle;
     }
-
-    .step h4 {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.15rem;
-      margin: 0 0 0.65rem;
-      color: var(--ink);
-      font-size: 1.02rem;
-    }
-
+    .step h4 { display: block; margin: 0 0 3pt; font-size: 9.75pt; color: #12201b; }
     pre {
-      background: var(--code-bg);
-      color: var(--code-fg);
-      border-radius: 8px;
-      padding: 1rem 1.1rem;
-      overflow-x: auto;
-      font-family: "IBM Plex Mono", ui-monospace, monospace;
-      font-size: 0.84rem;
-      line-height: 1.55;
-      margin: 0.75rem 0 1rem;
+      background: #1f2a26; color: #e8f0eb; border-radius: 0;
+      padding: 6pt 7pt; overflow: hidden; white-space: pre-wrap; word-break: break-word;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      font-size: 7.5pt; line-height: 1.32; margin: 3pt 0 5pt;
+      break-inside: auto; page-break-inside: auto;
     }
-
     code {
-      font-family: "IBM Plex Mono", ui-monospace, monospace;
-      font-size: 0.88em;
-      background: #e5eee9;
-      padding: 0.1em 0.35em;
-      border-radius: 4px;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      font-size: 0.9em; background: #eef2f0; padding: 0 1.5pt;
     }
-
-    pre code {
-      background: transparent;
-      padding: 0;
-      font-size: inherit;
-      color: inherit;
-    }
-
+    pre code { background: transparent; color: inherit; padding: 0; font-size: inherit; }
     table {
-      width: 100%;
-      border-collapse: collapse;
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      overflow: hidden;
-      margin: 0.75rem 0 1.25rem;
-      font-size: 0.94rem;
+      width: 100%; border-collapse: collapse; background: #fff;
+      border: 0.6pt solid #c5d0cb; margin: 4pt 0 6pt; font-size: 8pt;
     }
-
-    th, td {
-      text-align: left;
-      padding: 0.7rem 0.85rem;
-      border-bottom: 1px solid var(--line);
-      vertical-align: top;
-    }
-
-    th {
-      background: #e8f0eb;
-      font-weight: 600;
-      color: var(--ink-soft);
-    }
-
+    thead { display: table-header-group; }
+    tr { break-inside: avoid; page-break-inside: avoid; }
+    th, td { text-align: left; padding: 3.5pt 4.5pt; border-bottom: 0.45pt solid #d5ddd8; vertical-align: top; }
+    th { background: #e8efeb; font-weight: 700; color: #243029; }
     tr:last-child td { border-bottom: 0; }
-
-    .flow {
-      display: grid;
-      gap: 0.75rem;
-      margin: 1rem 0 1.25rem;
-    }
-
+    .flow { display: block; margin: 4pt 0 6pt; }
     .flow-item {
-      display: grid;
-      grid-template-columns: auto 1fr;
-      gap: 0.85rem;
-      align-items: start;
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 0.9rem 1rem;
+      display: grid; grid-template-columns: 14pt 1fr; gap: 5pt; align-items: start;
+      background: #fff; border: 0.5pt solid #d0d8d3; border-radius: 0;
+      padding: 3.5pt 5pt; margin: 0 0 2.5pt;
+      break-inside: avoid; page-break-inside: avoid;
     }
-
     .flow-item .n {
-      width: 1.8rem;
-      height: 1.8rem;
-      border-radius: 50%;
-      background: var(--accent-soft);
-      color: var(--accent-deep);
-      display: grid;
-      place-items: center;
-      font-weight: 700;
-      font-size: 0.85rem;
+      width: 13pt; height: 13pt; border-radius: 50%; background: #d8efe9; color: #0a4d42;
+      display: grid; place-items: center; font-weight: 700; font-size: 7.5pt;
     }
-
     .checklist { list-style: none; padding-left: 0; }
-    .checklist li {
-      position: relative;
-      padding-left: 1.6rem;
-      margin: 0.45rem 0;
-    }
+    .checklist li { position: relative; padding-left: 13pt; margin: 1.5pt 0; }
     .checklist li::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 0.45rem;
-      width: 0.85rem;
-      height: 0.85rem;
-      border: 2px solid var(--accent);
-      border-radius: 3px;
-      background: #fff;
+      content: "☐"; position: absolute; left: 0; top: 0;
+      width: auto; height: auto; border: 0; background: transparent;
+      color: #0f6b5c; font-size: 9.5pt; line-height: 1.3;
     }
-
     footer {
-      border-top: 1px solid var(--line);
-      padding-top: 1.25rem;
-      color: var(--muted);
-      font-size: 0.88rem;
-    }
-
-    @keyframes rise {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-
-    @media print {
-      @page { size: Letter; margin: 0.55in 0.6in 0.65in 0.6in; }
-      html { scroll-behavior: auto; }
-      body {
-        background: #fff !important;
-        font-size: 10pt;
-        line-height: 1.4;
-        color: #1a1f1c;
-      }
-      .wrap { width: 100%; max-width: none; padding: 0; margin: 0; }
-      * { animation: none !important; transition: none !important; box-shadow: none !important; }
-      nav.toc, .step, .callout, .flow-item, table {
-        break-inside: avoid;
-        page-break-inside: avoid;
-        border-radius: 0 !important;
-      }
-      .step { break-inside: auto; page-break-inside: auto; }
-      pre { white-space: pre-wrap; word-break: break-word; break-inside: auto; }
-      h2, h3, h4 { break-after: avoid; page-break-after: avoid; }
-      thead { display: table-header-group; }
-      a { color: inherit; text-decoration: none; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      html { scroll-behavior: auto; }
-      * { animation: none !important; transition: none !important; }
+      border-top: 0.6pt solid #c5d0cb; padding-top: 6pt; margin-top: 8pt;
+      color: #555; font-size: 8pt;
     }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <header class="doc-hero">
+<header class="doc-hero">
       <p class="eyebrow">Integration runbook</p>
       <h1>How Domo Connects to Snowflake for Data Reading and Magic ETL Queries</h1>
       <p class="lede">
