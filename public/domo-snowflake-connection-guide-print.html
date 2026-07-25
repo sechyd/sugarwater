@@ -1,0 +1,1535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Domo and Snowflake Connection Guide</title>
+  <style>
+    @page { size: Letter; margin: 0.85in 1in 0.9in 1in; }
+    * {
+      box-sizing: border-box;
+      animation: none !important;
+      transition: none !important;
+      box-shadow: none !important;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      color: #1a1f1c;
+      background: #fff;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 10pt;
+      line-height: 1.45;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+      overflow-wrap: anywhere;
+      word-wrap: break-word;
+    }
+    .wrap {
+      width: 100%;
+      max-width: none;
+      margin: 0;
+      padding: 0;
+      overflow: visible;
+    }
+    header.doc-hero {
+      padding: 0 0 10pt;
+      margin: 0 0 12pt;
+      border-bottom: 1.5pt solid #0f6b5c;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+    .eyebrow {
+      display: block;
+      font-size: 8pt;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #0f6b5c;
+      margin: 0 0 4pt;
+    }
+    h1 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 16pt;
+      line-height: 1.2;
+      font-weight: 700;
+      margin: 0 0 8pt;
+      color: #12201b;
+      overflow-wrap: break-word;
+    }
+    .lede {
+      font-size: 10pt;
+      color: #333;
+      margin: 0 0 6pt;
+      max-width: none;
+    }
+    .meta-row {
+      display: block;
+      margin-top: 6pt;
+      color: #555;
+      font-size: 8.5pt;
+    }
+    .meta-row span { display: inline; }
+    nav.toc {
+      background: #f4f7f5;
+      border: 0.75pt solid #c5d0cb;
+      border-radius: 0;
+      padding: 10pt 12pt;
+      margin: 0 0 14pt;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+    nav.toc h2 {
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: 9pt;
+      margin: 0 0 6pt;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #555;
+      border: 0;
+      padding: 0;
+    }
+    nav.toc ol {
+      margin: 0;
+      padding-left: 16pt;
+      columns: 1;
+      column-gap: 0;
+    }
+    nav.toc li {
+      margin: 2pt 0;
+      break-inside: avoid;
+      font-size: 9pt;
+    }
+    nav.toc a {
+      color: #1a1f1c;
+      text-decoration: none;
+    }
+    section {
+      margin: 0 0 12pt;
+      padding: 0;
+      overflow: visible;
+    }
+    h2 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 12.5pt;
+      margin: 14pt 0 6pt;
+      color: #12201b;
+      border-bottom: 0.75pt solid #d5ddd8;
+      padding-bottom: 3pt;
+      break-after: avoid;
+      page-break-after: avoid;
+    }
+    h3 {
+      font-size: 11pt;
+      margin: 10pt 0 4pt;
+      color: #1a1f1c;
+      break-after: avoid;
+      page-break-after: avoid;
+    }
+    h4 {
+      font-size: 10pt;
+      margin: 8pt 0 3pt;
+      color: #243029;
+      break-after: avoid;
+      page-break-after: avoid;
+    }
+    p { margin: 0 0 6pt; orphans: 3; widows: 3; }
+    ul, ol { margin: 0 0 6pt; padding-left: 18pt; }
+    li { margin: 1.5pt 0; }
+    li > ul, li > ol { margin: 2pt 0; }
+    a { color: #0a4d42; text-decoration: none; word-break: break-word; }
+    .callout {
+      border: 0.75pt solid #c5d0cb;
+      background: #f7f9f8;
+      border-radius: 0;
+      padding: 8pt 10pt;
+      margin: 6pt 0 8pt;
+      break-inside: avoid;
+      page-break-inside: avoid;
+      overflow: visible;
+    }
+    .callout.warn {
+      background: #fff8ee;
+      border-color: #d4a85a;
+      border-left: 2.5pt solid #c48a1a;
+    }
+    .callout.info {
+      background: #f3f7fc;
+      border-color: #9db4d4;
+      border-left: 2.5pt solid #4a78b0;
+    }
+    .callout.accent {
+      background: #eef7f4;
+      border-color: #9ecfc3;
+      border-left: 2.5pt solid #0f6b5c;
+    }
+    .callout strong.label {
+      display: block;
+      font-size: 8pt;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 2pt;
+      color: #333;
+    }
+    .step {
+      background: #fff;
+      border: 0.75pt solid #d0d8d3;
+      border-left: 2.5pt solid #0f6b5c;
+      border-radius: 0;
+      padding: 8pt 10pt;
+      margin: 5pt 0 7pt;
+      break-inside: auto;
+      page-break-inside: auto;
+      overflow: visible;
+    }
+    .step > h4 {
+      break-after: avoid;
+      page-break-after: avoid;
+    }
+    .step-num {
+      display: inline-block;
+      min-width: 14pt;
+      height: 14pt;
+      line-height: 14pt;
+      text-align: center;
+      border-radius: 0;
+      background: #0f6b5c;
+      color: #fff;
+      font-size: 8pt;
+      font-weight: 700;
+      margin-right: 4pt;
+      padding: 0 3pt;
+      vertical-align: middle;
+    }
+    .step h4 {
+      display: block;
+      margin: 0 0 4pt;
+      font-size: 10pt;
+      color: #12201b;
+    }
+    pre {
+      background: #1f2a26;
+      color: #e8f0eb;
+      border-radius: 0;
+      padding: 8pt 9pt;
+      margin: 4pt 0 6pt;
+      overflow: visible;
+      white-space: pre-wrap;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      font-size: 8pt;
+      line-height: 1.35;
+      break-inside: auto;
+      page-break-inside: auto;
+      max-width: 100%;
+    }
+    code {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      font-size: 0.9em;
+      background: #eef2f0;
+      padding: 0 2pt;
+      word-break: break-word;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+      font-size: inherit;
+    }
+    table {
+      width: 100%;
+      max-width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border: 0.75pt solid #c5d0cb;
+      margin: 5pt 0 8pt;
+      font-size: 8.5pt;
+      table-layout: fixed;
+    }
+    thead { display: table-header-group; }
+    tr { break-inside: avoid; page-break-inside: avoid; }
+    th, td {
+      text-align: left;
+      padding: 4pt 5pt;
+      border-bottom: 0.5pt solid #d5ddd8;
+      vertical-align: top;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+    th {
+      background: #e8efeb;
+      font-weight: 700;
+      color: #243029;
+    }
+    tr:last-child td { border-bottom: 0; }
+    .flow { display: block; margin: 5pt 0 8pt; }
+    .flow-item {
+      display: grid;
+      grid-template-columns: 16pt minmax(0, 1fr);
+      gap: 6pt;
+      align-items: start;
+      background: #fff;
+      border: 0.5pt solid #d0d8d3;
+      border-radius: 0;
+      padding: 4pt 6pt;
+      margin: 0 0 3pt;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+    .flow-item .n {
+      width: 14pt;
+      height: 14pt;
+      border-radius: 50%;
+      background: #d8efe9;
+      color: #0a4d42;
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      font-size: 8pt;
+    }
+    .checklist { list-style: none; padding-left: 0; }
+    .checklist li {
+      position: relative;
+      padding-left: 14pt;
+      margin: 2pt 0;
+    }
+    .checklist li::before {
+      content: "☐";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: auto;
+      height: auto;
+      border: 0;
+      background: transparent;
+      color: #0f6b5c;
+      font-size: 10pt;
+      line-height: 1.3;
+    }
+    footer {
+      border-top: 0.75pt solid #c5d0cb;
+      padding-top: 8pt;
+      margin-top: 10pt;
+      color: #555;
+      font-size: 8.5pt;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+<header class="doc-hero">
+      <p class="eyebrow">Integration runbook</p>
+      <h1>How Domo Connects to Snowflake for Data Reading and Magic ETL Queries</h1>
+      <p class="lede">
+        This document is a complete, sequential procedure for establishing a Snowflake → Domo read connection
+        and configuring Domo Magic ETL so that transformation queries execute in Snowflake.
+        Every required account, object, credential, permission, and UI action is listed.
+        No prior Snowflake or Domo setup is assumed.
+      </p>
+      <div class="meta-row">
+        <span>Direction: Snowflake → Domo (read)</span>
+        <span>·</span>
+        <span>Auth focus: Key-pair (recommended)</span>
+        <span>·</span>
+        <span>ETL: Magic ETL on Snowflake / Pass-Through SQL</span>
+      </div>
+    </header>
+
+    <nav class="toc" aria-label="Table of contents">
+      <h2>Contents</h2>
+      <ol>
+        <li><a href="#sec-0">0. What this guide covers and what it does not</a></li>
+        <li><a href="#sec-1">1. End-to-end architecture</a></li>
+        <li><a href="#sec-2">2. Prerequisites you must gather before starting</a></li>
+        <li><a href="#sec-3">3. Create a Snowflake account (from zero)</a></li>
+        <li><a href="#sec-4">4. Create a Domo account / instance (from zero)</a></li>
+        <li><a href="#sec-5">5. Record Snowflake account identifiers exactly</a></li>
+        <li><a href="#sec-6">6. Create Snowflake warehouse, database, schema, and sample data</a></li>
+        <li><a href="#sec-7">7. Create Domo-dedicated Snowflake role and service user</a></li>
+        <li><a href="#sec-8">8. Generate RSA key pair and assign public key to Snowflake user</a></li>
+        <li><a href="#sec-9">9. Grant minimum read permissions for Domo</a></li>
+        <li><a href="#sec-10">10. (Conditional) Network allowlisting for Domo IPs</a></li>
+        <li><a href="#sec-11">11. Path A — Domo Snowflake Key Pair connector (copy data into Domo)</a></li>
+        <li><a href="#sec-12">12. Path B — Domo on Snowflake Cloud Integration (data stays in Snowflake)</a></li>
+        <li><a href="#sec-13">13. Enable Write &amp; Transform so Magic ETL can run queries in Snowflake</a></li>
+        <li><a href="#sec-14">14. Build a Magic ETL DataFlow that executes SQL in Snowflake</a></li>
+        <li><a href="#sec-15">15. Schedule, verify, and troubleshoot</a></li>
+        <li><a href="#sec-16">16. Security checklist and operational notes</a></li>
+        <li><a href="#sec-17">17. Official documentation references</a></li>
+      </ol>
+    </nav>
+
+    <!-- 0 -->
+    <section id="sec-0">
+      <h2>0. What this guide covers and what it does not</h2>
+
+      <h3>Covered (explicitly in scope)</h3>
+      <ul>
+        <li>Creating a Snowflake account if one does not exist.</li>
+        <li>Creating a Domo account/instance if one does not exist.</li>
+        <li>Creating a dedicated Snowflake role, warehouse, and service user for Domo.</li>
+        <li>Configuring key-pair authentication (Snowflake’s supported replacement for single-factor username/password auth).</li>
+        <li>Granting the minimum Snowflake privileges Domo needs to <strong>read</strong> data.</li>
+        <li>Connecting Domo so it can run SELECT queries against Snowflake and bring result sets into Domo DataSets (connector path).</li>
+        <li>Configuring Domo’s Snowflake Cloud Integration so Magic ETL can execute transformations and Pass-Through SQL <strong>inside</strong> Snowflake.</li>
+      </ul>
+
+      <h3>Not covered (out of scope for this runbook)</h3>
+      <ul>
+        <li>Pushing Domo analytics writeback into Snowflake as a primary business process (mentioned only where required for Magic ETL native execution).</li>
+        <li>Snowflake data loading from external sources (S3, Azure Blob, etc.).</li>
+        <li>SSO/IdP configuration for human users in Domo or Snowflake.</li>
+        <li>Private Link / Private Connectivity networking (separate enterprise project).</li>
+      </ul>
+
+      <div class="callout warn">
+        <strong class="label">Authentication change you must plan for</strong>
+        Snowflake discontinued support for single-factor username/password authentication for service-style integrations.
+        Domo’s legacy username/password Snowflake connector is retired / migrating.
+        This guide therefore uses the <strong>Snowflake Key Pair Authentication</strong> connector and key-pair service accounts.
+        Do not build a new Domo↔Snowflake integration on password-only credentials.
+      </div>
+    </section>
+
+    <!-- 1 -->
+    <section id="sec-1">
+      <h2>1. End-to-end architecture</h2>
+      <p>
+        Domo and Snowflake can connect in two related but different ways. Your stated goal needs both concepts:
+        <em>reading from Snowflake into Domo workflows</em>, and <em>Magic ETL that runs queries in Snowflake</em>.
+      </p>
+
+      <h3>Path A — Connector ingest (data is copied into Domo)</h3>
+      <div class="flow">
+        <div class="flow-item"><div class="n">1</div><div>Domo Snowflake Key Pair connector authenticates to Snowflake using a service username + RSA private key.</div></div>
+        <div class="flow-item"><div class="n">2</div><div>Domo submits the SQL query you configured (SELECT-style) to Snowflake over JDBC.</div></div>
+        <div class="flow-item"><div class="n">3</div><div>Snowflake runs the query on the warehouse you grant to the Domo role.</div></div>
+        <div class="flow-item"><div class="n">4</div><div>Result rows are transferred into a Domo DataSet (a copy now lives in Domo).</div></div>
+        <div class="flow-item"><div class="n">5</div><div>Standard Magic ETL in Domo can transform that Domo-hosted DataSet (compute in Domo, not Snowflake).</div></div>
+      </div>
+
+      <h3>Path B — Cloud Integration + Magic ETL on Snowflake (queries execute in Snowflake)</h3>
+      <div class="flow">
+        <div class="flow-item"><div class="n">1</div><div>You create a Snowflake Cloud Integration in Domo (service account + key-pair or OAuth).</div></div>
+        <div class="flow-item"><div class="n">2</div><div>Read setup exposes Snowflake tables as Domo virtual DataSets (source data remains in Snowflake).</div></div>
+        <div class="flow-item"><div class="n">3</div><div>Write &amp; Transform setup grants Domo a managed write database/schema and enables native Magic ETL execution.</div></div>
+        <div class="flow-item"><div class="n">4</div><div>In Magic ETL, you select the Snowflake integration as the <strong>Compute</strong> engine.</div></div>
+        <div class="flow-item"><div class="n">5</div><div>Pass-Through SQL tiles submit native Snowflake SQL; Domo orchestration runs the work in Snowflake compute.</div></div>
+      </div>
+
+      <div class="callout info">
+        <strong class="label">How to choose for your goal</strong>
+        If Domo only needs a periodic extract of Snowflake query results into Domo DataSets for cards, start with <strong>Path A</strong>.
+        If Magic ETL must run queries <em>in Snowflake</em> (pushdown / Pass-Through SQL), you must complete <strong>Path B</strong>, including Write &amp; Transform.
+        Completing Path B also satisfies read use cases via virtual tables; Path A is still useful for classic connector-based ingestion schedules.
+      </div>
+    </section>
+
+    <!-- 2 -->
+    <section id="sec-2">
+      <h2>2. Prerequisites you must gather before starting</h2>
+      <p>Before any configuration, collect or decide the following. Do not skip items; later steps reference these exact values.</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Who provides it</th>
+            <th>Why it is required</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Business email address for Snowflake signup</td>
+            <td>Your organization</td>
+            <td>Snowflake trial/paid account registration and verification</td>
+          </tr>
+          <tr>
+            <td>Business email address for Domo signup / invitation</td>
+            <td>Your organization</td>
+            <td>Domo instance creation or user join</td>
+          </tr>
+          <tr>
+            <td>Chosen cloud platform for Snowflake (AWS, Azure, or GCP)</td>
+            <td>Your organization / Snowflake admin</td>
+            <td>Selected during Snowflake account creation; affects region and networking</td>
+          </tr>
+          <tr>
+            <td>Chosen Snowflake region</td>
+            <td>Your organization / Snowflake admin</td>
+            <td>Selected during Snowflake account creation; must match latency/compliance needs</td>
+          </tr>
+          <tr>
+            <td>Chosen Snowflake Edition</td>
+            <td>Your organization / Snowflake admin</td>
+            <td>Selected during signup (Standard / Enterprise / etc.)</td>
+          </tr>
+          <tr>
+            <td>Machine with OpenSSL available (macOS/Linux/Windows with OpenSSL)</td>
+            <td>The person generating keys</td>
+            <td>Create RSA private/public key files for key-pair auth</td>
+          </tr>
+          <tr>
+            <td>Secure secret storage (password manager / vault)</td>
+            <td>Security team / you</td>
+            <td>Store private key, passphrase, Domo credentials, role names</td>
+          </tr>
+          <tr>
+            <td>Names for Domo objects in Snowflake</td>
+            <td>You (decide now)</td>
+            <td>Used consistently in SQL below</td>
+          </tr>
+          <tr>
+            <td>Source database/schema/tables Domo is allowed to read</td>
+            <td>Data owner / Snowflake admin</td>
+            <td>SELECT grants must be issued on exact objects</td>
+          </tr>
+          <tr>
+            <td>Whether Snowflake already has a network policy / IP restriction</td>
+            <td>Snowflake admin / security</td>
+            <td>If yes, Domo egress IPs must be allowlisted before any Domo connection works</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Canonical names used in this document</h3>
+      <p>
+        Replace these placeholders with your real names everywhere. The guide uses them so every SQL statement is copy-ready after substitution.
+      </p>
+      <table>
+        <thead>
+          <tr><th>Placeholder</th><th>Meaning</th><th>Example value used in samples</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>DOMO_READ_WH</code></td><td>Warehouse Domo uses for read/query compute</td><td><code>DOMO_READ_WH</code></td></tr>
+          <tr><td><code>SOURCE_DB</code></td><td>Database Domo will read from</td><td><code>ANALYTICS_DB</code></td></tr>
+          <tr><td><code>SOURCE_SCHEMA</code></td><td>Schema Domo will read from</td><td><code>PUBLIC</code></td></tr>
+          <tr><td><code>SOURCE_TABLE</code></td><td>Table Domo will read</td><td><code>CUSTOMERS</code></td></tr>
+          <tr><td><code>DOMO_READONLY</code></td><td>Snowflake role for Domo read access</td><td><code>DOMO_READONLY</code></td></tr>
+          <tr><td><code>DOMO_SVC_USER</code></td><td>Snowflake service user Domo authenticates as</td><td><code>DOMO_SVC_USER</code></td></tr>
+          <tr><td><code>MY_WRITEBACK_DB</code></td><td>Dedicated DB for Domo write/transform objects (Path B)</td><td><code>DOMO_WRITEBACK_DB</code></td></tr>
+          <tr><td><code>WRITEBACK_SCHEMA</code></td><td>Schema for Domo-managed transform outputs (Path B)</td><td><code>WRITEBACK_SCHEMA</code></td></tr>
+          <tr><td><code>DOMO_WRITEBACK</code></td><td>Role used for write/transform (Path B)</td><td><code>DOMO_WRITEBACK</code></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 3 -->
+    <section id="sec-3">
+      <h2>3. Create a Snowflake account (from zero)</h2>
+      <p>
+        Perform every step in this section if your organization does <strong>not</strong> already have a Snowflake account.
+        If an account already exists, skip to <a href="#sec-5">Section 5</a>, but still confirm you have a user with
+        <code>ACCOUNTADMIN</code> (or equivalent ability to create users/roles/warehouses and grant privileges).
+      </p>
+
+      <div class="step">
+        <h4><span class="step-num">3.1</span> Open the Snowflake signup form</h4>
+        <ol>
+          <li>Open a browser.</li>
+          <li>Go to the Snowflake self-service signup URL: <a href="https://signup.snowflake.com/" target="_blank" rel="noopener">https://signup.snowflake.com/</a>.</li>
+          <li>Do not invent alternate signup URLs; use the official form.</li>
+        </ol>
+      </div>
+
+      <div class="step">
+        <h4><span class="step-num">3.2</span> Enter identity and company information</h4>
+        <ol>
+          <li>Enter a valid email address you can access immediately (required for verification).</li>
+          <li>Complete every required field on the form (name, company, country, etc., as presented by Snowflake at signup time).</li>
+          <li>Accept Snowflake’s terms if prompted.</li>
+          <li>Submit the form to continue.</li>
+        </ol>
+      </div>
+
+      <div class="step">
+        <h4><span class="step-num">3.3</span> Choose cloud platform, region, and Snowflake Edition</h4>
+        <ol>
+          <li>Select a cloud platform: Amazon Web Services (AWS), Microsoft Azure, or Google Cloud Platform (GCP).</li>
+          <li>Select a region. Record the exact region name in your notes (example format: <code>US East (N. Virginia)</code> or equivalent).</li>
+          <li>Select a Snowflake Edition offered on the form (for example Standard or Enterprise).</li>
+          <li>Confirm the selection. These choices cannot be casually changed later for the same account locator; treat them as permanent for this account.</li>
+        </ol>
+        <div class="callout warn">
+          <strong class="label">Why this matters for Domo</strong>
+          Your Snowflake account identifier and hostname include organization/account naming and historically may include region/cloud segments.
+          Domo connection fields require the exact account identifier Snowflake shows for your account. Choosing the wrong region now creates lasting latency and compliance implications.
+        </div>
+      </div>
+
+      <div class="step">
+        <h4><span class="step-num">3.4</span> Verify email and activate the account</h4>
+        <ol>
+          <li>Open the inbox for the email used in step 3.2.</li>
+          <li>Locate the Snowflake verification / activation message.</li>
+          <li>Follow the link in that email.</li>
+          <li>Set the initial password (or complete the activation flow Snowflake presents).</li>
+          <li>Record the username you will use for the first administrator login (typically the email or the username Snowflake assigns).</li>
+        </ol>
+      </div>
+
+      <div class="step">
+        <h4><span class="step-num">3.5</span> First sign-in to Snowsight (Snowflake web UI)</h4>
+        <ol>
+          <li>Open the account URL provided in the activation email, or sign in through Snowflake’s web interface using the account details from activation.</li>
+          <li>Sign in with the administrator credentials created above.</li>
+          <li>Confirm you land in Snowsight (Snowflake’s web UI).</li>
+          <li>In the left navigation, confirm you can open a SQL worksheet (commonly under <strong>Projects → Worksheets</strong> or the equivalent current Snowsight navigation).</li>
+        </ol>
+      </div>
+
+      <div class="step">
+        <h4><span class="step-num">3.6</span> Confirm you hold ACCOUNTADMIN for setup</h4>
+        <ol>
+          <li>Open a SQL worksheet.</li>
+          <li>Run:</li>
+        </ol>
+<pre><code>SELECT CURRENT_USER(), CURRENT_ROLE();</code></pre>
+        <ol start="3">
+          <li>If the current role is not <code>ACCOUNTADMIN</code>, switch:</li>
+        </ol>
+<pre><code>USE ROLE ACCOUNTADMIN;</code></pre>
+        <ol start="4">
+          <li>Confirm again with <code>SELECT CURRENT_ROLE();</code> — the result must be <code>ACCOUNTADMIN</code> for the administrative SQL in later sections.</li>
+        </ol>
+      </div>
+
+      <div class="callout accent">
+        <strong class="label">Trial vs paid</strong>
+        A Snowflake trial can be created with only an email. Trial duration and free credits are governed by Snowflake’s current trial policy.
+        Converting to paid requires adding a payment method in Snowsight under Admin / Billing when your organization is ready.
+        Domo connectivity works on trial and paid accounts; compute credits are still consumed by warehouses when queries run.
+      </div>
+    </section>
+
+    <!-- 4 -->
+    <section id="sec-4">
+      <h2>4. Create a Domo account / instance (from zero)</h2>
+      <p>
+        Perform this section if your organization does <strong>not</strong> already have a Domo instance.
+        If Domo already exists, skip to step 4.5 and ensure your user has rights to create connectors / cloud integrations and DataFlows.
+      </p>
+
+      <div class="step">
+        <h4><span class="step-num">4.1</span> Start Domo Free Trial signup</h4>
+        <ol>
+          <li>Open <a href="https://www.domo.com" target="_blank" rel="noopener">https://www.domo.com</a>.</li>
+          <li>Select <strong>Try Free</strong> ( Domo Free Trial signup ).</li>
+          <li>Enter a business email address.</li>
+          <li>Select <strong>Create Account</strong>.</li>
+        </ol>
+      </div>
+
+      <div class="step">
+        <h4><span class="step-num">4.2</span> Verify email and set login credentials</h4>
+        <ol>
+          <li>Open the verification email Domo sends to the address you entered.</li>
+          <li>Complete verification.</li>
+          <li>Configure the password / login credentials Domo prompts for.</li>
+          <li>Finish the signup wizard until you are signed into a Domo instance.</li>
+        </ol>
+      </div>
+
+      <div class="step">
+        <h4><span class="step-num">4.3</span> Record your Domo instance domain</h4>
+        <ol>
+          <li>Look at the browser address bar after login.</li>
+          <li>Record the instance URL in the form <code>https://&lt;your-company&gt;.domo.com</code>.</li>
+          <li>Store this URL with your other connection notes. All later Domo steps occur inside this instance.</li>
+        </ol>
+      </div>
+
+      <div class="step">
+        <h4><span class="step-num">4.4</span> Confirm the signup user is an administrator</h4>
+        <ol>
+          <li>The user who creates the Domo Free Trial instance receives administrative grants by default.</li>
+          <li>Open Admin (wrench / Admin area in left navigation).</li>
+          <li>Confirm you can open <strong>Governance → People</strong> and <strong>Governance → Roles</strong>.</li>
+          <li>If you cannot open Admin, stop and have an existing Domo Admin invite you with an Admin (or equivalent) role before continuing.</li>
+        </ol>
+      </div>
+
+      <div class="step">
+        <h4><span class="step-num">4.5</span> (If Domo already exists) Create or invite the Domo user who will own the Snowflake integration</h4>
+        <ol>
+          <li>Sign in as a Domo Admin.</li>
+          <li>From the navigation header, select <strong>Add → People → Person</strong> (or Admin → Governance → People).</li>
+          <li>Enter the user’s full name and email.</li>
+          <li>Assign a security role that can manage data connections. For Cloud Integrations, Domo documents that the Domo service/admin user needs grants including <strong>Manage Cloud Accounts</strong> and <strong>Manage DataSet</strong>.</li>
+          <li>Select <strong>Invite</strong>.</li>
+          <li>The invited user opens the invitation email (“Congrats, you just got Domo’d!”), selects <strong>Get Started</strong>, sets a password, and selects <strong>Create Your Account</strong>.</li>
+        </ol>
+      </div>
+
+      <div class="step">
+        <h4><span class="step-num">4.6</span> Confirm Domo feature access needed for this project</h4>
+        <p>While signed into Domo as the integration owner, verify you can reach:</p>
+        <ul class="checklist">
+          <li><strong>Data Center</strong> / DataSets area (to create connectors).</li>
+          <li><strong>Magic ETL</strong> (openable from a DataSet via Open With → Magic ETL, or via DataFlows).</li>
+          <li><strong>Cloud Integrations / Domo on Snowflake</strong> settings (required for Path B and for Magic ETL queries that execute in Snowflake).</li>
+        </ul>
+        <p>If any of these menus are missing, a Domo Admin must adjust your role grants before proceeding.</p>
+      </div>
+    </section>
+
+    <!-- 5 -->
+    <section id="sec-5">
+      <h2>5. Record Snowflake account identifiers exactly</h2>
+      <p>
+        Domo connection forms ask for an account name / account identifier. Entering an approximate value will fail authentication.
+        Capture the values from Snowflake itself.
+      </p>
+
+      <div class="step">
+        <h4><span class="step-num">5.1</span> Find organization name and account name in Snowsight</h4>
+        <ol>
+          <li>Sign in to Snowsight.</li>
+          <li>Open <strong>Account</strong> details (Snowsight provides <strong>Account → View Account Details</strong> or an equivalent account menu showing organization and account name).</li>
+          <li>Record:
+            <ul>
+              <li><strong>Organization name</strong> (example shape: <code>MYORG</code>)</li>
+              <li><strong>Account name</strong> (example shape: <code>ANALYTICS</code>)</li>
+            </ul>
+          </li>
+          <li>Compose the preferred account identifier:
+            <pre><code>orgname-account_name</code></pre>
+            Example: <code>myorg-analytics</code>
+          </li>
+        </ol>
+      </div>
+
+      <div class="step">
+        <h4><span class="step-num">5.2</span> Confirm with SQL</h4>
+        <p>In a worksheet as <code>ACCOUNTADMIN</code> (or any role that can run context functions), run:</p>
+<pre><code>SELECT
+  CURRENT_ORGANIZATION_NAME() AS org_name,
+  CURRENT_ACCOUNT_NAME()      AS account_name,
+  CURRENT_ACCOUNT()           AS account_locator;</code></pre>
+        <ol>
+          <li>Write down all three results.</li>
+          <li>Prefer <code>org_name-account_name</code> as the identifier for modern clients and Domo Cloud Integration fields that ask for account identifier.</li>
+          <li>Domo’s classic Snowflake connector documentation also describes account name as the portion of the Snowflake URL immediately after <code>https://</code>, and for some region formats <code>account_name.region_id</code>. Use the exact format Domo’s connector field help text requests for the connector version you select, cross-checked against your Snowsight URL.</li>
+        </ol>
+      </div>
+
+      <div class="step">
+        <h4><span class="step-num">5.3</span> Record the Snowflake hostname</h4>
+        <p>Your account hostname follows:</p>
+<pre><code>&lt;account_identifier&gt;.snowflakecomputing.com</code></pre>
+        <p>Example:</p>
+<pre><code>myorg-analytics.snowflakecomputing.com</code></pre>
+        <p>Store this hostname. Some Domo UIs ask for account name only; others show host-derived guidance. Never guess the region suffix.</p>
+      </div>
+    </section>
+
+    <!-- 6 -->
+    <section id="sec-6">
+      <h2>6. Create Snowflake warehouse, database, schema, and sample data</h2>
+      <p>
+        Domo cannot read data that does not exist, and Domo cannot run queries without a warehouse.
+        This section creates the compute and a concrete readable object. If your source data already exists, still create a Domo-dedicated warehouse, then skip sample-table creation and use your real objects in the GRANT statements.
+      </p>
+
+      <div class="step">
+        <h4><span class="step-num">6.1</span> Create a Domo read warehouse</h4>
+        <p>In Snowsight, open a worksheet. Ensure role is <code>ACCOUNTADMIN</code> or <code>SYSADMIN</code> with warehouse-create rights. Run:</p>
+<pre><code>USE ROLE ACCOUNTADMIN;
+
+CREATE WAREHOUSE IF NOT EXISTS DOMO_READ_WH
+  WITH
+    WAREHOUSE_SIZE = 'XSMALL'
+    AUTO_SUSPEND = 60
+    AUTO_RESUME = TRUE
+    INITIALLY_SUSPENDED = TRUE
+    COMMENT = 'Compute warehouse dedicated to Domo read / query workloads';</code></pre>
+        <ol>
+          <li>Confirm success message in the worksheet.</li>
+          <li>Do not disable auto-suspend; a suspended warehouse still auto-resumes when Domo queries arrive (because <code>AUTO_RESUME = TRUE</code>).</li>
+        </ol>
+      </div>
+
+      <div class="step">
+        <h4><span class="step-num">6.2</span> Create (or identify) the source database and schema</h4>
+        <p>If you are creating a fresh demo source:</p>
+<pre><code>CREATE DATABASE IF NOT EXISTS ANALYTICS_DB;
+CREATE SCHEMA IF NOT EXISTS ANALYTICS_DB.PUBLIC;</code></pre>
+        <p>If source objects already exist, do <strong>not</strong> recreate them. Instead record the real database and schema names and substitute them for <code>ANALYTICS_DB</code> / <code>PUBLIC</code> in every later statement.</p>
+      </div>
+
+      <div class="step">
+        <h4><span class="step-num">6.3</span> Create a sample table Domo can query (only if no real source table exists yet)</h4>
+<pre><code>USE WAREHOUSE DOMO_READ_WH;
+USE DATABASE ANALYTICS_DB;
+USE SCHEMA PUBLIC;
+
+CREATE TABLE IF NOT EXISTS CUSTOMERS (
+  CUSTOMER_ID   NUMBER,
+  CUSTOMER_NAME VARCHAR,
+  SIGNUP_DATE   DATE
+);
+
+INSERT INTO CUSTOMERS (CUSTOMER_ID, CUSTOMER_NAME, SIGNUP_DATE)
+SELECT 1, 'Acme Credit Union', CURRENT_DATE()
+WHERE NOT EXISTS (SELECT 1 FROM CUSTOMERS WHERE CUSTOMER_ID = 1);
+
+SELECT * FROM CUSTOMERS;</code></pre>
+        <ol>
+          <li>Confirm the SELECT returns at least one row.</li>
+          <li>If this INSERT/SELECT fails, fix warehouse/database permissions for your admin user before continuing — Domo will not succeed if your admin query already fails.</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- 7 -->
+    <section id="sec-7">
+      <h2>7. Create Domo-dedicated Snowflake role and service user</h2>
+      <p>
+        Do not point Domo at a human administrator account. Create a dedicated service user and a least-privilege role.
+      </p>
+
+      <div class="step">
+        <h4><span class="step-num">7.1</span> Create the read role</h4>
+<pre><code>USE ROLE ACCOUNTADMIN;
+
+CREATE ROLE IF NOT EXISTS DOMO_READONLY
+  COMMENT = 'Least-privilege role for Domo to read Snowflake data';</code></pre>
+      </div>
+
+      <div class="step">
+        <h4><span class="step-num">7.2</span> Create the service user</h4>
+        <p>
+          Snowflake supports users of type <code>SERVICE</code> for non-interactive integrations.
+          Create the Domo service user without relying on password login for Domo.
+        </p>
+<pre><code>CREATE USER IF NOT EXISTS DOMO_SVC_USER
+  TYPE = SERVICE
+  DEFAULT_ROLE = DOMO_READONLY
+  DEFAULT_WAREHOUSE = DOMO_READ_WH
+  COMMENT = 'Service user used exclusively by Domo connectors / cloud integration';</code></pre>
+        <div class="callout info">
+          <strong class="label">If TYPE = SERVICE is rejected</strong>
+          Some accounts/editions/UI contexts may require slightly different user-property syntax depending on Snowflake version.
+          If <code>TYPE = SERVICE</code> fails, create the user with <code>CREATE USER DOMO_SVC_USER ...</code> using your account’s supported service-user properties, then proceed to key-pair assignment.
+          Do not use a shared human password as the long-term Domo credential.
+        </div>
+      </div>
+
+      <div class="step">
+        <h4><span class="step-num">7.3</span> Grant the role to the user</h4>
+<pre><code>GRANT ROLE DOMO_READONLY TO USER DOMO_SVC_USER;</code></pre>
+        <ol>
+          <li>Confirm with:</li>
+        </ol>
+<pre><code>SHOW GRANTS TO USER DOMO_SVC_USER;</code></pre>
+        <ol start="2">
+          <li>Verify <code>DOMO_READONLY</code> appears among granted roles.</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- 8 -->
+    <section id="sec-8">
+      <h2>8. Generate RSA key pair and assign public key to Snowflake user</h2>
+      <p>
+        Domo’s key-pair connector authenticates with the Snowflake username plus the private key.
+        Snowflake stores only the public key on the user object.
+      </p>
+
+      <div class="step">
+        <h4><span class="step-num">8.1</span> Generate an encrypted private key on a trusted machine</h4>
+        <ol>
+          <li>Open a terminal on a machine you control (not a shared jump host with broad access).</li>
+          <li>Confirm OpenSSL works: <code>openssl version</code>.</li>
+          <li>Create a working directory and enter it.</li>
+          <li>Generate an encrypted PKCS#8 private key (Snowflake/Domo documented approach):</li>
+        </ol>
+<pre><code>openssl genrsa 2048 | openssl pkcs8 -topk8 -v2 des3 -inform PEM -out rsa_key.p8</code></pre>
+        <ol start="5">
+          <li>When prompted, enter a strong passphrase. Store that passphrase in your vault immediately.</li>
+          <li>Confirm file exists: <code>rsa_key.p8</code>.</li>
+        </ol>
+        <p>If your security policy allows an unencrypted private key (generally less preferred), the documented alternative is:</p>
+<pre><code>openssl genrsa 2048 | openssl pkcs8 -topk8 -inform PEM -out rsa_key.p8 -nocrypt</code></pre>
+      </div>
+
+      <div class="step">
+        <h4><span class="step-num">8.2</span> Generate the public key</h4>
+<pre><code>openssl rsa -in rsa_key.p8 -pubout -out rsa_key.pub</code></pre>
+        <ol>
+          <li>Enter the passphrase if the private key is encrypted.</li>
+          <li>Open <code>rsa_key.pub</code> in a text editor.</li>
+          <li>You will see headers like <code>-----BEGIN PUBLIC KEY-----</code> / <code>-----END PUBLIC KEY-----</code>.</li>
+          <li>Copy only the base64 body (exclude the BEGIN/END lines and exclude line-break artifacts when pasting into SQL). Snowflake’s <code>ALTER USER ... RSA_PUBLIC_KEY</code> examples use the key material without delimiters.</li>
+        </ol>
+      </div>
+
+      <div class="step">
+        <h4><span class="step-num">8.3</span> Assign the public key to DOMO_SVC_USER</h4>
+        <p>In Snowsight, as a role that owns the user or has <code>MODIFY PROGRAMMATIC AUTHENTICATION METHODS</code> (ACCOUNTADMIN works for setup):</p>
+<pre><code>USE ROLE ACCOUNTADMIN;
+
+ALTER USER DOMO_SVC_USER SET RSA_PUBLIC_KEY='MIIBIjANBgkqh...paste_full_public_key_body_here...';</code></pre>
+        <p>Recommended newer Snowflake syntax (named key pair), if available in your account:</p>
+<pre><code>ALTER USER DOMO_SVC_USER ADD KEY PAIR domo_connector_key
+  PUBLIC_KEY = 'MIIBIjANBgkqh...paste_full_public_key_body_here...';</code></pre>
+        <div class="callout warn">
+          <strong class="label">Common failure</strong>
+          Including <code>-----BEGIN PUBLIC KEY-----</code> lines inside the SQL string, or truncating the key, causes authentication failures later in Domo that look like “incorrect username or private key.”
+          Paste the complete key body in one continuous string as Snowflake’s examples show.
+        </div>
+      </div>
+
+      <div class="step">
+        <h4><span class="step-num">8.4</span> Verify the public key fingerprint</h4>
+        <ol>
+          <li>In Snowflake, retrieve the fingerprint:</li>
+        </ol>
+<pre><code>DESC USER DOMO_SVC_USER;</code></pre>
+        <ol start="2">
+          <li>Note the <code>RSA_PUBLIC_KEY_FP</code> property (SHA256:…).</li>
+          <li>On the machine that holds <code>rsa_key.pub</code>, run:</li>
+        </ol>
+<pre><code>openssl rsa -pubin -in rsa_key.pub -outform DER | openssl dgst -sha256 -binary | openssl enc -base64</code></pre>
+        <ol start="4">
+          <li>Compare the OpenSSL output to the Snowflake fingerprint value after the <code>SHA256:</code> prefix. They must match exactly.</li>
+        </ol>
+      </div>
+
+      <div class="step">
+        <h4><span class="step-num">8.5</span> Secure the private key for Domo use</h4>
+        <ol>
+          <li>Keep <code>rsa_key.p8</code> only in approved secret storage and on the machine used to upload into Domo.</li>
+          <li>Do not commit the private key to git, chat, tickets, or shared drives.</li>
+          <li>You will upload/paste this private key into Domo in Sections 11 and/or 12.</li>
+          <li>If the key is encrypted, Domo will also need the passphrase.</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- 9 -->
+    <section id="sec-9">
+      <h2>9. Grant minimum read permissions for Domo</h2>
+      <p>
+        Domo’s documented minimum read privileges are: <code>USAGE</code> on warehouse, database, and schema; <code>SELECT</code> on tables/views.
+        Grant exactly those on the objects Domo must read — nothing more for a read-only integration.
+      </p>
+
+      <div class="step">
+        <h4><span class="step-num">9.1</span> Grant warehouse usage</h4>
+<pre><code>USE ROLE ACCOUNTADMIN;
+
+GRANT USAGE ON WAREHOUSE DOMO_READ_WH TO ROLE DOMO_READONLY;</code></pre>
+      </div>
+
+      <div class="step">
+        <h4><span class="step-num">9.2</span> Grant database and schema usage</h4>
+<pre><code>GRANT USAGE ON DATABASE ANALYTICS_DB TO ROLE DOMO_READONLY;
+GRANT USAGE ON SCHEMA ANALYTICS_DB.PUBLIC TO ROLE DOMO_READONLY;</code></pre>
+      </div>
+
+      <div class="step">
+        <h4><span class="step-num">9.3</span> Grant SELECT on the specific table(s)</h4>
+<pre><code>GRANT SELECT ON TABLE ANALYTICS_DB.PUBLIC.CUSTOMERS TO ROLE DOMO_READONLY;</code></pre>
+        <p>Repeat for every table/view Domo must query. Or, for all current tables in a schema:</p>
+<pre><code>GRANT SELECT ON ALL TABLES IN SCHEMA ANALYTICS_DB.PUBLIC TO ROLE DOMO_READONLY;
+GRANT SELECT ON ALL VIEWS  IN SCHEMA ANALYTICS_DB.PUBLIC TO ROLE DOMO_READONLY;</code></pre>
+      </div>
+
+      <div class="step">
+        <h4><span class="step-num">9.4</span> (Optional but recommended) Future grants for new tables</h4>
+<pre><code>GRANT SELECT ON FUTURE TABLES IN SCHEMA ANALYTICS_DB.PUBLIC TO ROLE DOMO_READONLY;
+GRANT SELECT ON FUTURE VIEWS  IN SCHEMA ANALYTICS_DB.PUBLIC TO ROLE DOMO_READONLY;</code></pre>
+      </div>
+
+      <div class="step">
+        <h4><span class="step-num">9.5</span> Validate as the Domo role (impersonation test)</h4>
+<pre><code>USE ROLE DOMO_READONLY;
+USE WAREHOUSE DOMO_READ_WH;
+USE DATABASE ANALYTICS_DB;
+USE SCHEMA PUBLIC;
+
+SELECT * FROM CUSTOMERS LIMIT 10;</code></pre>
+        <ol>
+          <li>This must return rows.</li>
+          <li>If it fails with privilege errors, fix grants before opening Domo — Domo will surface the same failure less clearly.</li>
+          <li>Switch back when finished: <code>USE ROLE ACCOUNTADMIN;</code></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- 10 -->
+    <section id="sec-10">
+      <h2>10. (Conditional) Network allowlisting for Domo IPs</h2>
+      <p>
+        Perform this section only if Snowflake (or an upstream firewall) restricts inbound client IPs.
+        If there is no network policy and no IP restriction, Domo can connect from its cloud egress addresses without Snowflake-side allowlisting.
+      </p>
+
+      <div class="step">
+        <h4><span class="step-num">10.1</span> Determine whether a restriction exists</h4>
+        <ol>
+          <li>In Snowsight, check for account-level or user-level network policies (Admin / Security areas, or <code>SHOW NETWORK POLICIES;</code>).</li>
+          <li>Ask your cloud/network team whether Snowflake public endpoints are firewalled.</li>
+          <li>If neither applies, skip to Section 11 or 12.</li>
+        </ol>
+      </div>
+
+      <div class="step">
+        <h4><span class="step-num">10.2</span> Obtain Domo’s current egress IP list for your Domo region</h4>
+        <ol>
+          <li>Open Domo’s official article <strong>Allow Domo IP Addresses for Network Connections</strong>:
+            <a href="https://www.domo.com/docs/s/article/360043630093" target="_blank" rel="noopener">https://www.domo.com/docs/s/article/360043630093</a>
+          </li>
+          <li>Identify where your Domo instance is hosted (Domo documents IPs by Domo hosting region).</li>
+          <li>Copy <strong>all</strong> IPs/CIDRs listed for that Domo region. Partial allowlists cause intermittent connector failures.</li>
+          <li>Do <strong>not</strong> add these IPs to a Domo-instance login allowlist; they belong on the Snowflake/network side only.</li>
+        </ol>
+      </div>
+
+      <div class="step">
+        <h4><span class="step-num">10.3</span> Create or update a Snowflake network policy and attach it to DOMO_SVC_USER</h4>
+        <p>
+          Snowflake’s current best practice is network rules attached to network policies.
+          Your Snowflake admin should create a policy that allows Domo’s published IPs and assign it to <code>DOMO_SVC_USER</code>.
+          Example pattern (substitute the real IP list from Domo’s article — do not invent IPs):
+        </p>
+<pre><code>USE ROLE ACCOUNTADMIN;
+
+-- Example structure only. Replace IP values with the official Domo list for your Domo region.
+CREATE NETWORK POLICY IF NOT EXISTS DOMO_INBOUND_NETWORK_POLICY
+  ALLOWED_IP_LIST = ('x.x.x.x/yy', 'a.b.c.d/zz')
+  COMMENT = 'Allow Domo connector / cloud integration egress IPs';
+
+ALTER USER DOMO_SVC_USER SET NETWORK_POLICY = DOMO_INBOUND_NETWORK_POLICY;</code></pre>
+        <p>If your account requires network rules instead of legacy <code>ALLOWED_IP_LIST</code>, follow Snowflake’s current network-policy documentation to achieve the same allowlist effect, then attach that policy to the Domo service user.</p>
+      </div>
+    </section>
+
+    <!-- 11 -->
+    <section id="sec-11">
+      <h2>11. Path A — Domo Snowflake Key Pair connector (copy data into Domo)</h2>
+      <p>
+        This path creates a Domo DataSet by running a SQL query in Snowflake and ingesting the result into Domo.
+        Use this when Domo should store a copy of the query output on Domo’s schedule.
+      </p>
+
+      <div class="step">
+        <h4><span class="step-num">11.1</span> Open Domo Data Center and choose the Key Pair connector</h4>
+        <ol>
+          <li>Sign in to <code>https://&lt;your-company&gt;.domo.com</code>.</li>
+          <li>Open the <strong>Data</strong> / <strong>Data Center</strong> area.</li>
+          <li>Start creating a new DataSet / connector.</li>
+          <li>Filter or browse to <strong>Database</strong> connectors.</li>
+          <li>Select <strong>Snowflake Key Pair Authentication</strong> (exact tile name in Domo: Snowflake Using Key Pair Authentication / Snowflake Key Pair Authentication Connector).</li>
+          <li>Do not select the retired username/password-only Snowflake connector for new work.</li>
+        </ol>
+      </div>
+
+      <div class="step">
+        <h4><span class="step-num">11.2</span> Create the Domo credentials account for Snowflake</h4>
+        <p>In the credentials pane, enter each field deliberately:</p>
+        <table>
+          <thead>
+            <tr><th>Domo field</th><th>Exact value to enter</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Account Name</td>
+              <td>Snowflake account name / identifier as Domo’s connector help text specifies (from Section 5). For many accounts this is the host prefix / <code>account_name.region_id</code> style value Domo documents for the connector.</td>
+            </tr>
+            <tr>
+              <td>Username</td>
+              <td><code>DOMO_SVC_USER</code> (the Snowflake user created in Section 7)</td>
+            </tr>
+            <tr>
+              <td>Private Key</td>
+              <td>Contents of <code>rsa_key.p8</code> (upload or paste as the connector UI requires; Domo documents .p8 private key use)</td>
+            </tr>
+            <tr>
+              <td>Passphrase</td>
+              <td>The passphrase from step 8.1 if the private key is encrypted; leave empty only if you generated an unencrypted key</td>
+            </tr>
+            <tr>
+              <td>Role</td>
+              <td><code>DOMO_READONLY</code></td>
+            </tr>
+          </tbody>
+        </table>
+        <ol>
+          <li>Name the Domo credentials account something unambiguous (example: <code>Snowflake-Prod-DomoRead-KeyPair</code>).</li>
+          <li>Save / connect / authenticate.</li>
+          <li>If authentication fails, re-check account identifier format, username spelling, public key assignment, passphrase, and network policy before changing Snowflake data grants.</li>
+        </ol>
+      </div>
+
+      <div class="step">
+        <h4><span class="step-num">11.3</span> Configure the query details pane</h4>
+        <ol>
+          <li>In <strong>Warehouses</strong>, select <code>DOMO_READ_WH</code>. The dropdown lists warehouses the credentials can use; if empty, warehouse USAGE is missing.</li>
+          <li>In <strong>Databases</strong>, select <code>ANALYTICS_DB</code> (or your real source DB).</li>
+          <li>In <strong>Schemas</strong>, select <code>PUBLIC</code> (or your real schema).</li>
+          <li>Optionally use Domo’s <strong>Query Helper</strong>:
+            <ol>
+              <li>Select warehouse, database, schema, table, and columns in the helper menus.</li>
+              <li>Copy the SQL Domo builds in the Query Helper field.</li>
+              <li>Paste that SQL into the main <strong>Query</strong> field.</li>
+            </ol>
+          </li>
+          <li>Or type the SQL yourself in <strong>Query</strong>, for example:</li>
+        </ol>
+<pre><code>SELECT
+  CUSTOMER_ID,
+  CUSTOMER_NAME,
+  SIGNUP_DATE
+FROM ANALYTICS_DB.PUBLIC.CUSTOMERS;</code></pre>
+        <ol start="6">
+          <li>Run Domo’s preview / test if offered. Confirm columns and sample rows match Snowflake.</li>
+        </ol>
+      </div>
+
+      <div class="step">
+        <h4><span class="step-num">11.4</span> Name the DataSet and set the refresh schedule</h4>
+        <ol>
+          <li>Enter a DataSet name (example: <code>Snowflake - Customers</code>).</li>
+          <li>Set update schedule (hourly/daily/etc.) according to freshness needs and Snowflake credit budget.</li>
+          <li>Save and run the DataSet.</li>
+          <li>Open the DataSet when the run completes and verify row counts against the same query in Snowsight.</li>
+        </ol>
+      </div>
+
+      <div class="callout info">
+        <strong class="label">What just happened technically</strong>
+        On each run, Domo authenticates as <code>DOMO_SVC_USER</code> with the private key, assumes role <code>DOMO_READONLY</code>,
+        uses warehouse <code>DOMO_READ_WH</code>, executes your SQL in Snowflake, and loads the result into Domo storage.
+        This is reading from Snowflake into Domo. It is not yet “Magic ETL running inside Snowflake.”
+        For that, continue with Path B.
+      </div>
+    </section>
+
+    <!-- 12 -->
+    <section id="sec-12">
+      <h2>12. Path B — Domo on Snowflake Cloud Integration (data stays in Snowflake)</h2>
+      <p>
+        Domo’s Snowflake Cloud Integration (“Domo on Snowflake”) creates a reusable integration object.
+        After read setup, you can create virtual DataSets that reference Snowflake tables without copying them into Domo for storage.
+        This integration is the foundation for Magic ETL that executes in Snowflake.
+      </p>
+
+      <div class="step">
+        <h4><span class="step-num">12.1</span> Prerequisites specific to Cloud Integration</h4>
+        <ul class="checklist">
+          <li>Snowflake service user + key pair already created (Sections 7–8).</li>
+          <li>Read grants already applied (Section 9).</li>
+          <li>Domo user has <strong>Manage Cloud Accounts</strong> and <strong>Manage DataSet</strong> grants (Domo’s documented Cloud Integration prerequisites).</li>
+          <li>Network allowlisting completed if required (Section 10).</li>
+        </ul>
+      </div>
+
+      <div class="step">
+        <h4><span class="step-num">12.2</span> Create the Snowflake service account credential inside Domo</h4>
+        <ol>
+          <li>In Domo, open the Snowflake Cloud Integration / Domo on Snowflake setup area (Cloud Integrations).</li>
+          <li>Choose to add a Snowflake service account / Add account.</li>
+          <li>Select authentication method <strong>Key Pair</strong> (recommended).</li>
+          <li>Enter:
+            <ul>
+              <li>Account identifier from Section 5 (Snowsight Account Details / <code>orgname-account_name</code> as Domo’s field requests).</li>
+              <li>Username: <code>DOMO_SVC_USER</code></li>
+              <li>Private key file (<code>.p8</code>)</li>
+              <li>Passphrase if used</li>
+              <li>Default Role (optional in UI): <code>DOMO_READONLY</code> — if blank, Snowflake uses the user’s default role</li>
+            </ul>
+          </li>
+          <li>Connect / save. Resolve any auth errors before creating the integration object.</li>
+        </ol>
+      </div>
+
+      <div class="step">
+        <h4><span class="step-num">12.3</span> Create the Snowflake Cloud Integration (read)</h4>
+        <ol>
+          <li>Select <strong>Add</strong> / create Snowflake integration.</li>
+          <li>Name field: enter a Domo-facing label (example: <code>Snowflake Production</code>). This name does not need to match a Snowflake object name.</li>
+          <li>Optional description: document purpose and owners.</li>
+          <li>Select the Snowflake service account created in 12.2.</li>
+          <li>Complete the read-only setup steps Domo presents (warehouse selection / discovery as shown in the wizard).</li>
+          <li>Finish read setup. At this point Domo can create virtual tables / DataSets that read Snowflake.</li>
+        </ol>
+      </div>
+
+      <div class="step">
+        <h4><span class="step-num">12.4</span> Create a virtual DataSet from a Snowflake table</h4>
+        <ol>
+          <li>From the integration, browse or search for <code>ANALYTICS_DB.PUBLIC.CUSTOMERS</code> (or your real table).</li>
+          <li>Create the Domo DataSet / virtual table for that Snowflake object.</li>
+          <li>Open the DataSet preview in Domo and confirm columns/rows.</li>
+          <li>Note: unlike Path A, the authoritative data remains in Snowflake; Domo is querying through the integration.</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- 13 -->
+    <section id="sec-13">
+      <h2>13. Enable Write &amp; Transform so Magic ETL can run queries in Snowflake</h2>
+      <p>
+        Magic ETL that executes natively in Snowflake, including Pass-Through SQL, requires the Cloud Integration to be configured for
+        <strong>WRITE</strong> and <strong>TRANSFORM</strong> — even when your business goal is primarily reading and transforming.
+        Domo needs a managed location in Snowflake for intermediate/transform objects.
+      </p>
+
+      <div class="callout warn">
+        <strong class="label">Why write privileges appear in a “read + ETL queries” project</strong>
+        Domo’s Magic ETL on Snowflake feature creates/manages tables (and for Native Transform, temporary schemas) in a Domo-managed database during execution.
+        Without Write &amp; Transform enabled on the same Cloud Integration that holds your inputs, Domo cannot offer Snowflake as the Magic ETL Compute engine for Pass-Through SQL.
+      </div>
+
+      <div class="step">
+        <h4><span class="step-num">13.1</span> Decide the Domo-managed write database and schema names</h4>
+        <ol>
+          <li>Choose a dedicated database Domo may write into (recommended new database), example: <code>DOMO_WRITEBACK_DB</code>.</li>
+          <li>Choose a target schema for outputs, example: <code>WRITEBACK_SCHEMA</code>.</li>
+          <li>Domo also uses a utility schema name <code>DOMO_UTIL</code> for managed file formats/resources in writeback flows — Domo documents this name as fixed for that utility purpose.</li>
+        </ol>
+      </div>
+
+      <div class="step">
+        <h4><span class="step-num">13.2</span> Start Write &amp; Transform setup in Domo</h4>
+        <ol>
+          <li>Open the Snowflake integration’s settings page in Domo.</li>
+          <li>Navigate to <strong>Write &amp; transform</strong>.</li>
+          <li>Select <strong>Set up write &amp; transform</strong>.</li>
+          <li>Toggle on the capabilities you need:
+            <ul>
+              <li><strong>Execute Magic ETL transformations natively</strong> — required for Magic ETL compute in Snowflake / Pass-Through SQL.</li>
+              <li><strong>Write to Snowflake from connectors</strong> — enable only if you also want connector writeback; not required solely for reading, but often configured together in the same wizard.</li>
+            </ul>
+          </li>
+          <li>Select the default Database and Schema where Domo will write transform outputs.</li>
+          <li>In <strong>Default Role</strong>, enter the Snowflake role Domo should use for write/transform SQL generation (commonly a dedicated write role such as <code>DOMO_WRITEBACK</code>, or follow the role Domo’s generated SQL expects).</li>
+        </ol>
+      </div>
+
+      <div class="step">
+        <h4><span class="step-num">13.3</span> Ensure a write role and grants exist (Domo minimum-permissions model)</h4>
+        <p>
+          Domo’s minimum-permissions documentation separates <code>DOMO_READONLY</code> from <code>DOMO_WRITEBACK</code>.
+          For Magic ETL native execution you need the writeback/transform permission scope.
+          As <code>ACCOUNTADMIN</code>, create the role and Domo-managed database objects if Domo’s generated script has not already created them:
+        </p>
+<pre><code>USE ROLE ACCOUNTADMIN;
+
+CREATE ROLE IF NOT EXISTS DOMO_WRITEBACK;
+
+CREATE DATABASE IF NOT EXISTS DOMO_WRITEBACK_DB;
+CREATE SCHEMA IF NOT EXISTS DOMO_WRITEBACK_DB.DOMO_UTIL;
+CREATE SCHEMA IF NOT EXISTS DOMO_WRITEBACK_DB.WRITEBACK_SCHEMA;
+
+GRANT USAGE ON WAREHOUSE DOMO_READ_WH TO ROLE DOMO_WRITEBACK;
+-- Prefer a separate transform warehouse in production if credit isolation is required.
+
+GRANT USAGE ON DATABASE DOMO_WRITEBACK_DB TO ROLE DOMO_WRITEBACK;
+GRANT USAGE ON SCHEMA DOMO_WRITEBACK_DB.DOMO_UTIL TO ROLE DOMO_WRITEBACK;
+GRANT USAGE ON SCHEMA DOMO_WRITEBACK_DB.WRITEBACK_SCHEMA TO ROLE DOMO_WRITEBACK;
+
+GRANT CREATE TABLE ON SCHEMA DOMO_WRITEBACK_DB.WRITEBACK_SCHEMA TO ROLE DOMO_WRITEBACK;
+GRANT CREATE FILE FORMAT ON SCHEMA DOMO_WRITEBACK_DB.DOMO_UTIL TO ROLE DOMO_WRITEBACK;
+
+-- Native Transform / pushdown also needs CREATE SCHEMA on the writeback database:
+GRANT CREATE SCHEMA ON DATABASE DOMO_WRITEBACK_DB TO ROLE DOMO_WRITEBACK;
+
+-- Service user must hold the writeback role for transform execution:
+GRANT ROLE DOMO_WRITEBACK TO USER DOMO_SVC_USER;
+
+-- Transform inputs still need read privileges on source objects:
+GRANT USAGE ON DATABASE ANALYTICS_DB TO ROLE DOMO_WRITEBACK;
+GRANT USAGE ON SCHEMA ANALYTICS_DB.PUBLIC TO ROLE DOMO_WRITEBACK;
+GRANT SELECT ON ALL TABLES IN SCHEMA ANALYTICS_DB.PUBLIC TO ROLE DOMO_WRITEBACK;
+GRANT SELECT ON FUTURE TABLES IN SCHEMA ANALYTICS_DB.PUBLIC TO ROLE DOMO_WRITEBACK;</code></pre>
+        <div class="callout info">
+          <strong class="label">Prefer Domo-generated SQL when the wizard provides it</strong>
+          Domo’s Write &amp; Transform wizard generates SQL that an <code>ACCOUNTADMIN</code> must run in Snowflake.
+          When Domo shows generated SQL, run <em>that</em> script as the source of truth, then reconcile any naming differences with the example above.
+          Domo intentionally avoids storing ACCOUNTADMIN credentials; a human Snowflake admin must execute the script.
+        </div>
+      </div>
+
+      <div class="step">
+        <h4><span class="step-num">13.4</span> Run Domo’s generated SQL in Snowflake</h4>
+        <ol>
+          <li>Copy the SQL from Domo’s Write &amp; Transform wizard.</li>
+          <li>In Snowsight, <code>USE ROLE ACCOUNTADMIN;</code></li>
+          <li>Paste and run the entire script.</li>
+          <li>Confirm every statement succeeds.</li>
+          <li>Return to Domo and continue the wizard.</li>
+        </ol>
+      </div>
+
+      <div class="step">
+        <h4><span class="step-num">13.5</span> Finalize Write &amp; Native Transform in Domo</h4>
+        <ol>
+          <li>On Domo’s finalize page, review the permissions Domo lists.</li>
+          <li>Select the acknowledgement that Domo can make changes in the Snowflake write/transform scope (wording similar to: understand Domo can make changes to the Snowflake environment).</li>
+          <li>Select <strong>Done</strong>.</li>
+          <li>Confirm the integration now shows Write / Transform capabilities enabled.</li>
+          <li>Ensure at least one Snowflake warehouse in the integration is configured for <strong>Transform</strong> operations (Domo’s Magic ETL on Snowflake prerequisite).</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- 14 -->
+    <section id="sec-14">
+      <h2>14. Build a Magic ETL DataFlow that executes SQL in Snowflake</h2>
+      <p>
+        This section is the operational goal: Domo Magic ETL orchestrates a flow whose SQL/transform work runs in Snowflake.
+      </p>
+
+      <div class="step">
+        <h4><span class="step-num">14.1</span> Confirm Magic ETL on Snowflake prerequisites</h4>
+        <ul class="checklist">
+          <li>Snowflake Cloud Integration exists with Write capability configured.</li>
+          <li>Transform operation is enabled for at least one warehouse on that integration.</li>
+          <li>All input DataSets for the DataFlow belong to the <strong>same</strong> Snowflake Cloud Integration.</li>
+          <li>You are not mixing Domo-cloud-hosted connector DataSets as inputs into a Snowflake-compute DataFlow (Domo documents this as unsupported).</li>
+          <li>Service role has SELECT/MODIFY/USAGE/CREATE privileges needed for referenced transform objects (provided by the write/transform setup commands).</li>
+        </ul>
+      </div>
+
+      <div class="step">
+        <h4><span class="step-num">14.2</span> Open Magic ETL</h4>
+        <ol>
+          <li>In Domo, open a Snowflake virtual DataSet that will be an input (from Section 12.4).</li>
+          <li>Select <strong>Open With → Magic ETL</strong>.</li>
+          <li>Alternatively, create a new Magic ETL DataFlow from the DataFlows area and add Snowflake integration inputs.</li>
+        </ol>
+      </div>
+
+      <div class="step">
+        <h4><span class="step-num">14.3</span> Select Snowflake as the Compute engine</h4>
+        <ol>
+          <li>In the Magic ETL editor, locate the <strong>Compute</strong> dropdown.</li>
+          <li>Select your Snowflake Cloud Integration (the one configured for transform), not Domo local compute.</li>
+          <li>If the Snowflake option is missing, Write &amp; Transform is incomplete — return to Section 13.</li>
+        </ol>
+      </div>
+
+      <div class="step">
+        <h4><span class="step-num">14.4</span> Add input tile(s)</h4>
+        <ol>
+          <li>Add an Input DataSet tile for each Snowflake virtual DataSet required.</li>
+          <li>Only select inputs that live on the same Snowflake integration selected as Compute.</li>
+          <li>Configure any available data-selection filters if you need subset processing (optional).</li>
+        </ol>
+      </div>
+
+      <div class="step">
+        <h4><span class="step-num">14.5</span> Add a SQL tile and enable Snowflake Pass-Through SQL</h4>
+        <ol>
+          <li>From the left panel under Utility, drag a <strong>SQL</strong> tile onto the canvas.</li>
+          <li>Connect the input tile to the SQL tile.</li>
+          <li>In the SQL tile configuration panel, set <strong>SQL Dialect</strong> to <strong>Snowflake</strong>.</li>
+          <li>Read Domo’s caution dialog: SQL in this mode executes directly against your Snowflake environment with the integration’s credentials/permissions.</li>
+          <li>On the Code tab, write a Snowflake-supported SELECT (example):</li>
+        </ol>
+<pre><code>SELECT
+  CUSTOMER_ID,
+  CUSTOMER_NAME,
+  SIGNUP_DATE,
+  DATEDIFF('day', SIGNUP_DATE, CURRENT_DATE()) AS DAYS_SINCE_SIGNUP
+FROM input_table_name_as_shown_by_domo
+WHERE SIGNUP_DATE IS NOT NULL;</code></pre>
+        <ol start="6">
+          <li>Replace <code>input_table_name_as_shown_by_domo</code> with the exact input reference name Domo shows for the connected tile (Domo’s SQL tile documents how inputs are referenced in the editor).</li>
+          <li>Keep the statement as a SELECT that returns the dataset for downstream tiles. Domo Pass-Through SQL is for warehouse-native SELECT transformation patterns as documented.</li>
+        </ol>
+      </div>
+
+      <div class="step">
+        <h4><span class="step-num">14.6</span> Add Output DataSet tile</h4>
+        <ol>
+          <li>Drag an <strong>Output DataSet</strong> tile onto the canvas.</li>
+          <li>Connect the SQL tile to the output.</li>
+          <li>Name the output DataSet.</li>
+          <li>Choose update method supported for Magic ETL on Snowflake:
+            <ul>
+              <li><strong>Replace</strong> (default for subsequent runs after first creation)</li>
+              <li><strong>Append</strong> (supported alternative)</li>
+            </ul>
+          </li>
+          <li>Do not use unsupported update methods for Snowflake compute (Domo documents Upsert/Partition as error cases for Magic ETL on Snowflake).</li>
+        </ol>
+      </div>
+
+      <div class="step">
+        <h4><span class="step-num">14.7</span> Save, run, and verify execution in Snowflake</h4>
+        <ol>
+          <li>Save the DataFlow.</li>
+          <li>Run it once manually.</li>
+          <li>In Domo, confirm the run succeeds and the output DataSet has expected rows.</li>
+          <li>In Snowflake, as ACCOUNTADMIN or a monitoring role, verify query history shows statements from the Domo service user / role during the run window:
+            <pre><code>SELECT *
+FROM SNOWFLAKE.ACCOUNT_USAGE.QUERY_HISTORY
+WHERE USER_NAME = 'DOMO_SVC_USER'
+ORDER BY START_TIME DESC
+LIMIT 50;</code></pre>
+            Note: <code>ACCOUNT_USAGE</code> views can lag; for immediate session debugging also check Snowsight Monitoring / Query History filters for <code>DOMO_SVC_USER</code>.
+          </li>
+          <li>Confirm transform output objects appear in the Domo write database/schema configured in Section 13 when applicable.</li>
+        </ol>
+      </div>
+
+      <div class="step">
+        <h4><span class="step-num">14.8</span> Schedule the DataFlow</h4>
+        <ol>
+          <li>Open the DataFlow schedule settings.</li>
+          <li>Set the cadence that matches business freshness and Snowflake credit controls.</li>
+          <li>If inputs are also on connector schedules (Path A), align schedules so ETL does not run before upstream extracts finish — for Path B virtual inputs, scheduling is primarily about when Snowflake compute should run.</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- 15 -->
+    <section id="sec-15">
+      <h2>15. Schedule, verify, and troubleshoot</h2>
+
+      <h3>15.1 Verification matrix</h3>
+      <table>
+        <thead>
+          <tr><th>Check</th><th>Where</th><th>Pass criteria</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Key assigned</td>
+            <td>Snowflake <code>DESC USER DOMO_SVC_USER</code></td>
+            <td><code>RSA_PUBLIC_KEY_FP</code> present and matches OpenSSL fingerprint</td>
+          </tr>
+          <tr>
+            <td>Role can read</td>
+            <td>Snowsight <code>USE ROLE DOMO_READONLY; SELECT ...</code></td>
+            <td>Returns rows</td>
+          </tr>
+          <tr>
+            <td>Connector ingest</td>
+            <td>Domo DataSet run history</td>
+            <td>Successful run; row count matches Snowflake query</td>
+          </tr>
+          <tr>
+            <td>Cloud Integration read</td>
+            <td>Domo virtual DataSet preview</td>
+            <td>Columns/rows visible</td>
+          </tr>
+          <tr>
+            <td>Magic ETL on Snowflake</td>
+            <td>DataFlow run + Snowflake query history</td>
+            <td>DataFlow success; queries attributed to Domo service user</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>15.2 Frequent failures and exact remediations</h3>
+      <table>
+        <thead>
+          <tr><th>Symptom</th><th>Most likely cause</th><th>What to do</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Domo auth fails immediately</td>
+            <td>Wrong account identifier, wrong username, private/public key mismatch, wrong passphrase</td>
+            <td>Re-copy account identifier from Snowsight; re-verify fingerprint; re-upload <code>.p8</code>; confirm passphrase</td>
+          </tr>
+          <tr>
+            <td>Auth works, warehouse list empty</td>
+            <td>Missing <code>USAGE</code> on warehouse for the role used</td>
+            <td><code>GRANT USAGE ON WAREHOUSE DOMO_READ_WH TO ROLE DOMO_READONLY;</code> (and/or writeback role)</td>
+          </tr>
+          <tr>
+            <td>Warehouse appears, databases empty</td>
+            <td>Missing database/schema <code>USAGE</code></td>
+            <td>Grant USAGE on database and schema to the Domo role</td>
+          </tr>
+          <tr>
+            <td>Object visible, query fails on SELECT</td>
+            <td>Missing table SELECT</td>
+            <td>Grant SELECT on the table/view; re-test with <code>USE ROLE DOMO_READONLY</code></td>
+          </tr>
+          <tr>
+            <td>Intermittent connection timeouts</td>
+            <td>Incomplete Domo IP allowlist under network policy</td>
+            <td>Re-read Domo IP article for your Domo region; allow all listed CIDRs; attach policy to service user</td>
+          </tr>
+          <tr>
+            <td>Snowflake compute option missing in Magic ETL</td>
+            <td>Write &amp; Transform not finished; warehouse not enabled for Transform</td>
+            <td>Complete Section 13; enable Transform on a warehouse</td>
+          </tr>
+          <tr>
+            <td>Magic ETL errors about mixed clouds / inputs</td>
+            <td>Input DataSets not all on the same Snowflake integration</td>
+            <td>Rebuild DataFlow using only that integration’s virtual DataSets</td>
+          </tr>
+          <tr>
+            <td>DataFlow fails with unsupported update method</td>
+            <td>Output set to Upsert/Partition on Snowflake compute</td>
+            <td>Switch output to Replace or Append</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 16 -->
+    <section id="sec-16">
+      <h2>16. Security checklist and operational notes</h2>
+      <ul class="checklist">
+        <li>Snowflake human admins and Domo human admins are separate identities; both were created/verified in Sections 3–4.</li>
+        <li>Domo uses a dedicated Snowflake service user (<code>DOMO_SVC_USER</code>), not a shared personal login.</li>
+        <li>Authentication is key-pair based; private key and passphrase live only in approved secret storage and Domo credential objects.</li>
+        <li>Read role grants are limited to required warehouses/databases/schemas/tables.</li>
+        <li>Write/transform privileges are isolated to a Domo-managed database where possible.</li>
+        <li>Network policy (if used) is scoped to the Domo service user and uses Domo’s published egress IPs for your Domo region.</li>
+        <li>Query history in Snowflake is monitored for the Domo service user.</li>
+        <li>Key rotation procedure exists: generate new key pair, assign new public key (or rotate named key pair), update Domo private key, retire old key after grace period.</li>
+        <li>Warehouse auto-suspend is enabled to control credit burn when Domo is idle.</li>
+      </ul>
+
+      <h3>Operational sequence summary (after accounts exist)</h3>
+      <ol>
+        <li>Snowflake: warehouse + source objects ready.</li>
+        <li>Snowflake: role + service user + public key + grants.</li>
+        <li>Domo: Key Pair connector DataSet(s) for copied extracts (optional Path A).</li>
+        <li>Domo: Snowflake Cloud Integration read setup (Path B).</li>
+        <li>Domo + Snowflake admin: Write &amp; Transform SQL applied.</li>
+        <li>Domo: Magic ETL Compute = Snowflake; Pass-Through SQL as needed; schedule runs.</li>
+      </ol>
+    </section>
+
+    <!-- 17 -->
+    <section id="sec-17">
+      <h2>17. Official documentation references</h2>
+      <p>Use these primary sources if UI labels change; procedures above map to these documents:</p>
+      <ul>
+        <li>Snowflake trial signup: <a href="https://docs.snowflake.com/en/user-guide/admin-trial-account" target="_blank" rel="noopener">Trial accounts</a> · signup form <a href="https://signup.snowflake.com/" target="_blank" rel="noopener">signup.snowflake.com</a></li>
+        <li>Snowflake account identifiers: <a href="https://docs.snowflake.com/en/user-guide/admin-account-identifier" target="_blank" rel="noopener">Account identifiers</a></li>
+        <li>Snowflake key-pair auth: <a href="https://docs.snowflake.com/en/user-guide/key-pair-auth" target="_blank" rel="noopener">Key-pair authentication</a></li>
+        <li>Snowflake network policies: <a href="https://docs.snowflake.com/en/user-guide/network-policies" target="_blank" rel="noopener">Network policies</a></li>
+        <li>Domo Free Trial overview / signup: <a href="https://www.domo.com/docs/s/article/000005309" target="_blank" rel="noopener">Domo Free | Overview</a></li>
+        <li>Add users to Domo: <a href="https://www.domo.com/docs/s/article/360042934274" target="_blank" rel="noopener">Add Users to Domo</a></li>
+        <li>Domo Snowflake Key Pair Authentication Connector: <a href="https://www.domo.com/docs/s/article/360042931854" target="_blank" rel="noopener">Snowflake Key Pair Authentication Connector</a></li>
+        <li>Domo on Snowflake (Cloud Integration): <a href="https://www.domo.com/docs/s/article/4402322966807" target="_blank" rel="noopener">Domo on Snowflake</a></li>
+        <li>Snowflake minimum permissions for Domo: <a href="https://www.domo.com/docs/s/article/Snowflake-Minimum-Permissions-for-Domo" target="_blank" rel="noopener">Snowflake Minimum Permissions for Domo</a></li>
+        <li>Allow Domo IP addresses: <a href="https://www.domo.com/docs/s/article/360043630093" target="_blank" rel="noopener">Allow Domo IP Addresses for Network Connections</a></li>
+        <li>Magic ETL on Snowflake: <a href="https://www.domo.com/docs/s/article/000005455" target="_blank" rel="noopener">Magic ETL on Snowflake</a></li>
+        <li>Pass-Through SQL in Magic ETL: <a href="https://www.domo.com/docs/s/article/000005815" target="_blank" rel="noopener">Pass-Through SQL in Magic ETL</a></li>
+      </ul>
+    </section>
+
+    <footer>
+      <p>
+        This runbook is intentionally sequential: Snowflake account → Domo account → Snowflake service principal →
+        key-pair auth → least-privilege grants → Domo connector and/or Cloud Integration → Write &amp; Transform →
+        Magic ETL Pass-Through SQL on Snowflake compute.
+      </p>
+      <p>File: <code>public/domo-snowflake-connection-guide.html</code></p>
+    </footer>
+  </div>
+</body>
+</html>
